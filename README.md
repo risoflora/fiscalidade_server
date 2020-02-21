@@ -77,7 +77,7 @@ Siga as instruções iniciais de uso em [docs/Uso.md](docs/Uso.md). Para instru�
 
 ## Wishlist
 
-- [ ] permitir trocar o token do usuário administrador
+- [ ] criar usuário admin automaticamente com token único
 - [ ] embutir arquivo de serviço no executável
 - [ ] embutir arquivo de webservice no executável
 - [ ] daemon/serviço
