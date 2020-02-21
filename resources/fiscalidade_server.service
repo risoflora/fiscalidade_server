@@ -1,0 +1,10 @@
+[Unit]
+Description=Fiscalidade Server daemon
+After=basic.target
+[Service]
+ExecStart=fiscalidade_server
+Restart=always
+RestartSec=5s
+StartLimitInterval=0
+[Install]
+WantedBy=multi-user.target
