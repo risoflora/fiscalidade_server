@@ -126,6 +126,7 @@ pub fn rocket() -> anyhow::Result<rocket::Rocket> {
             mount_path!(),
             routes![
                 routes::version,
+                routes::info,
                 cache::list,
                 taxpayer::create,
                 taxpayer::update,

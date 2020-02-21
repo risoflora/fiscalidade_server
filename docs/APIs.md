@@ -45,13 +45,40 @@ ou:
 
 dentre outros.
 
-## Geral
+## Versão
 
 APIs:
 
 | Método | Caminho (path) | Tipo    | Utilidade                  |
 | ------ | -------------- | ------- | -------------------------- |
 | `GET`  | `/version`     | Pública | Exibe a versão do servidor |
+
+Dados:
+
+| Campo   | Tipo  | Descrição                |
+| ------- | ----- | ------------------------ |
+| `major` | `u8`  | Versão MAJOR do servidor |
+| `minor` | `u16` | Versão MINOR servidor    |
+| `patch` | `u32` | Versão PATCH servidor    |
+
+## Informação
+
+APIs:
+
+| Método | Caminho (path) | Tipo    | Utilidade                          |
+| ------ | -------------- | ------- | ---------------------------------- |
+| `GET`  | `/info`        | Pública | Exibe informações sobre o servidor |
+
+Dados:
+
+| Campo       | Tipo      | Descrição                       |
+| ----------- | --------- | ------------------------------- |
+| `name`      | `String`  | Nome da aplicação               |
+| `long_name` | `String`  | Nome completo da aplicação      |
+| `version`   | `Version` | Versão do servidor              |
+| `authors`   | `String`  | Autores do projeto              |
+| `arch`      | `String`  | Arquitetura do servidor         |
+| `os`        | `String`  | Sistema operacional do servidor |
 
 ## Contribuintes (Taxpayers)
 

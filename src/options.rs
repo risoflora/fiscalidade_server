@@ -4,17 +4,13 @@ use anyhow::anyhow;
 use getopts::Options as GetOptsOptions;
 
 use crate::args::Args;
-use crate::utils;
+use crate::utils::Info;
 
 fn print_help(program: &str, opts: &GetOptsOptions) {
+    let info = Info::new();
     let brief = format!(
         "{} v{} ({}-{})\n\nCopyright (c) {}\n\nUso: {} [opções]",
-        utils::APP_LONG_NAME,
-        utils::APP_VERSION,
-        utils::APP_OS,
-        utils::APP_ARCH,
-        utils::APP_AUTHORS,
-        program
+        info.long_name, info.version, info.os, info.arch, info.authors, program
     );
     println!(
         "{}",
@@ -30,7 +26,7 @@ fn print_help(program: &str, opts: &GetOptsOptions) {
 }
 
 fn print_version() {
-    println!("{}", version!());
+    println!("{}", Info::new());
     process::exit(0);
 }
 

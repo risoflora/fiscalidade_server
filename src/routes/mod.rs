@@ -18,6 +18,7 @@ pub mod taxpayer;
 pub mod taxpayer_service;
 
 use crate::db;
+use crate::utils::{Info, Version};
 
 #[derive(Error, Debug)]
 pub enum ApiError {
@@ -41,5 +42,10 @@ impl<'r> Responder<'r> for ApiError {
 
 #[get("/version")]
 pub fn version() -> JsonValue {
-    json_ok!(version!())
+    json_ok!(Version::new())
+}
+
+#[get("/info")]
+pub fn info() -> JsonValue {
+    json_ok!(Info::new())
 }

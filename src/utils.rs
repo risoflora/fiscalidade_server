@@ -1,13 +1,6 @@
-use std::env;
+use std::{env, fmt};
 
 use nanoid;
-
-pub const APP_NAME: &'static str = env!("CARGO_PKG_NAME");
-pub const APP_LONG_NAME: &'static str = "Fiscalidade Server";
-pub const APP_VERSION: &'static str = env!("CARGO_PKG_VERSION");
-pub const APP_AUTHORS: &'static str = env!("CARGO_PKG_AUTHORS");
-pub const APP_ARCH: &'static str = env::consts::ARCH;
-pub const APP_OS: &'static str = env::consts::OS;
 
 macro_rules! mount_path {
     () => {
@@ -30,16 +23,61 @@ macro_rules! json_error {
     };
 }
 
-macro_rules! version {
-    () => {
-        format!(
+#[derive(Serialize)]
+pub struct Version {
+    pub major: u8,
+    pub minor: u16,
+    pub patch: u32,
+}
+
+impl Version {
+    pub fn new() -> Self {
+        Self {
+            major: env!("CARGO_PKG_VERSION_MAJOR").parse().unwrap(),
+            minor: env!("CARGO_PKG_VERSION_MINOR").parse().unwrap(),
+            patch: env!("CARGO_PKG_VERSION_PATCH").parse().unwrap(),
+        }
+    }
+}
+
+impl fmt::Display for Version {
+    fn fmt(&self, fmt: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(fmt, "{}.{}.{}", self.major, self.minor, self.patch)
+    }
+}
+
+#[derive(Serialize)]
+pub struct Info {
+    pub name: String,
+    pub long_name: String,
+    pub version: Version,
+    pub authors: String,
+    pub arch: String,
+    pub os: String,
+}
+
+impl Info {
+    pub fn new() -> Self {
+        use self::*;
+        Self {
+            name: env!("CARGO_PKG_NAME").into(),
+            long_name: "Fiscalidade Server".into(),
+            version: Version::new(),
+            authors: env!("CARGO_PKG_AUTHORS").into(),
+            arch: env::consts::ARCH.into(),
+            os: env::consts::OS.into(),
+        }
+    }
+}
+
+impl fmt::Display for Info {
+    fn fmt(&self, fmt: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            fmt,
             "{} {} ({}-{})",
-            crate::utils::APP_NAME,
-            crate::utils::APP_VERSION,
-            crate::utils::APP_OS,
-            crate::utils::APP_ARCH
+            self.name, self.version, self.arch, self.os
         )
-    };
+    }
 }
 
 #[inline]
