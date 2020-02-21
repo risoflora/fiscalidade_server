@@ -84,7 +84,14 @@ curl -w '\n' http://localhost:8080/fiscalidade/v1/version
 ele deve retornar um JSON com a versão do servidor, exemplo:
 
 ```
-{"status":"ok","result":{"major":1,"minor":0,"patch":0}}
+{
+    "status": "ok",
+    "result": {
+        "major": 1,
+        "minor": 0,
+        "patch": 0
+    }
+}
 ```
 
 feito isso, agora podemos definir um administrador para gerenciamento do servidor:
@@ -93,15 +100,30 @@ feito isso, agora podemos definir um administrador para gerenciamento do servido
 curl -w '\n' -X POST http://localhost:8080/fiscalidade/v1/taxpayers/manager
 ```
 
-retorno:
+administrador criado:
 
 ```
-{"status":"ok","result":{"id":1,"name":"admin","business_name":"Administrador","registry":"","email":"","certificate":"","certificate_password":"","token":"qoNrF2mZsSUpZCEXUw2Mxx","manager":true,"active":true,"created_at":"2020-02-21T18:50:58.795898"}}
+{
+    "status": "ok",
+    "result": {
+        "id": 1,
+        "name": "admin",
+        "business_name": "Administrador",
+        "registry": "",
+        "email": "",
+        "certificate": "",
+        "certificate_password": "",
+        "token": "qoNrF2mZsSUpZCEXUw2Mxx",
+        "manager": true,
+        "active": true,
+        "created_at": "2020-02-21T18:50:58.795898"
+    }
+}
 ```
 
 Observe o token gerado: `qoNrF2mZsSUpZCEXUw2Mxx`. **Guarde ele em um local seguro!** Este será o token do administrador padrão do servidor. Usaremos ele nos passos a seguir.
 
-## Cadastrando contribuinte
+## Cadastrando contribuinte / solicitando uso de serviço
 
 Considerando que o certificado do contribuinte encontra-se em `~/Downloads/certificado.pfx`:
 
@@ -116,7 +138,22 @@ curl -w '\n' \
 o servidor deve retornar o seguinte JSON:
 
 ```
-{"status":"ok","result":{"id":2,"name":"Fulano","business_name":"Fulano de tal","registry":"123456789","email":"fulano@gmail","certificate":"MIIkEAIB...=","certificate_password":"12345678","token":"U8pNjWuAdj2PB3AGnai7mT","manager":false,"active":true,"created_at":"2020-02-21T19:04:22.374504"}}
+{
+    "status": "ok",
+    "result": {
+        "id": 2,
+        "name": "Fulano",
+        "business_name": "Fulano de tal",
+        "registry": "123456789",
+        "email": "fulano@gmail",
+        "certificate": "MIIkEAIB...<demais caracteres>=",
+        "certificate_password": "12345678",
+        "token": "U8pNjWuAdj2PB3AGnai7mT",
+        "manager": false,
+        "active": true,
+        "created_at": "2020-02-21T19:04:22.374504"
+    }
+}
 ```
 
 agora, com o contribuinte cadastrado, podemos fazer uma solicitação de uso de serviço. Para consultar a lista de serviços disponíveis, use:
@@ -126,13 +163,24 @@ curl -w '\n' \
     http://localhost:8080/fiscalidade/v1/services
 ```
 
-retorno:
+serviços listados:
 
 ```
-{"status":"ok","result":[{"id":1,"description":"NF-e","slug":"nfe","active":true,"created_at":"2020-02-21T18:50:38.268453"}]}
+{
+    "status": "ok",
+    "result": [
+        {
+            "id": 1,
+            "description": "NF-e",
+            "slug": "nfe",
+            "active": true,
+            "created_at": "2020-02-21T18:50:38.268453"
+        }
+    ]
+}
 ```
 
-por fim, solicitamos o serviço NF-e para contribuinte cadastrado:
+por fim, solicitamos o uso do serviço NF-e para contribuinte cadastrado:
 
 ```bash
 curl -w '\n' \
@@ -143,8 +191,135 @@ curl -w '\n' \
     http://localhost:8080/fiscalidade/v1/taxpayers/services
 ```
 
-retorno:
+solicitação criada:
 
 ```
-{"status":"ok","result":{"id":1,"taxpayer_id":2,"service_id":1,"allowed_at":null,"created_at":"2020-02-21T19:08:58.390814"}}
+{
+    "status": "ok",
+    "result": {
+        "id": 1,
+        "taxpayer_id": 2,
+        "service_id": 1,
+        "allowed_at": null,
+        "created_at": "2020-02-21T19:08:58.390814"
+    }
+}
+```
+
+## Autorizando uso de serviço
+
+A listagem de serviços solicitados pode ser acessada por qualquer usuário administrador. Neste exemplo, usaremos o administrador padrão, que foi cadastrado com o token `qoNrF2mZsSUpZCEXUw2Mxx`.
+
+Listando serviços solicitados:
+
+```bash
+curl -w '\n' \
+    -H 'X-Auth-Token: qoNrF2mZsSUpZCEXUw2Mxx' \
+    -H "Content-Type: application/json" \
+    http://localhost:8080/fiscalidade/v1/taxpayers/services/unauthorized
+```
+
+solicitações listadas:
+
+```
+{
+    "status": "ok",
+    "result": [
+        {
+            "id": 1,
+            "taxpayer_id": 2,
+            "taxpayer_name": "Fulano",
+            "service_id": 1,
+            "service_description": "NF-e",
+            "allowed_at": null,
+            "created_at": "2020-02-21T21:35:46.571708"
+        }
+    ]
+}
+```
+
+por fim, basta autorizar uso de serviço "NF-e" para contribuinte "Fulano":
+
+```bash
+curl -w '\n' \
+    -H 'X-Auth-Token: qoNrF2mZsSUpZCEXUw2Mxx' \
+    -H "Content-Type: application/json" \
+    -X POST \
+    http://localhost:8080/fiscalidade/v1/taxpayers/services/authorize/1
+```
+
+autorização criada:
+
+```
+{
+    "status": "ok",
+    "result": {
+        "id": 1,
+        "taxpayer_id": 2,
+        "service_id": 1,
+        "allowed_at": "2020-02-21T22:52:17.272386",
+        "created_at": "2020-02-21T21:37:46.255217"
+    }
+}
+```
+
+e finalmente o contribuinte tem permissão para acessar o serviço:
+
+```bash
+curl -w '\n' \
+    -H 'X-Auth-Token: U8pNjWuAdj2PB3AGnai7mT' \
+    http://localhost:8080/fiscalidade/v1/nfe/status-servico/mt/p
+```
+
+resultado:
+
+```
+{
+    "status": "ok",
+    "result": "<?xml version='1.0' encoding='utf-8'?><soapenv:Envelope xmlns:soapenv=\"http://www.w3.org/2003/05/soap-envelope\"><soapenv:Body><nfeResultMsg xmlns=\"http://www.portalfiscal.inf.br/nfe/wsdl/NFeStatusServico4\"><retConsStatServ xmlns=\"http://www.portalfiscal.inf.br/nfe\" versao=\"4.00\"><tpAmb>1</tpAmb><verAplic>MT_A2RL-4.00</verAplic><cStat>107</cStat><xMotivo>Servico em Operacao</xMotivo><cUF>51</cUF><dhRecbto>2020-02-21T19:29:35-04:00</dhRecbto><tMed>2</tMed></retConsStatServ></nfeResultMsg></soapenv:Body></soapenv:Envelope>"
+}
+```
+
+## Desautorizando uso de serviço
+
+Se por alguma razão for necessário remover autorização de uso de serviço para contribuinte, use:
+
+```bash
+curl -w '\n' \
+    -H 'X-Auth-Token: qoNrF2mZsSUpZCEXUw2Mxx' \
+    -H "Content-Type: application/json" \
+    -X PUT \
+    http://localhost:8080/fiscalidade/v1/taxpayers/services/unauthorize/1
+```
+
+resultado:
+
+```
+{
+    "status": "ok",
+    "result": {
+        "id": 1,
+        "taxpayer_id": 2,
+        "service_id": 1,
+        "allowed_at": null,
+        "created_at": "2020-02-21T21:48:56.980432"
+    }
+}
+```
+
+e ao tentar acessar o serviço novamente:
+
+```bash
+curl -w '\n' \
+    -H 'X-Auth-Token: U8pNjWuAdj2PB3AGnai7mT' \
+    http://localhost:8080/fiscalidade/v1/nfe/status-servico/mt/p
+```
+
+o acesso é negado:
+
+```
+{
+    "status": "error",
+    "reason": "Unauthorized"
+}
 ```

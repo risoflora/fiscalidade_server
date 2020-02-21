@@ -1,4 +1,4 @@
-use diesel::prelude::*;
+use diesel::{ExpressionMethods, OptionalExtension, PgConnection, QueryDsl, RunQueryDsl};
 
 use crate::db::Error;
 use crate::models::cache::{InsertableCache, QueryableCache};
