@@ -69,12 +69,12 @@ CREATE TABLE IF NOT EXISTS fiscalidade_caches (
 
 -- View para lista serviços relacionados a contribuintes
 CREATE OR REPLACE VIEW fiscalidade_taxpayers_services_view AS
-	SELECT
-		fts.*,
-		ft.name AS taxpayer_name,
-		fs.description AS service_description
-	FROM fiscalidade_taxpayers_services AS fts
-	INNER JOIN fiscalidade_taxpayers AS ft
+  SELECT
+    fts.*,
+    ft.name AS taxpayer_name,
+    fs.description AS service_description
+  FROM fiscalidade_taxpayers_services AS fts
+  INNER JOIN fiscalidade_taxpayers AS ft
     ON fts.taxpayer_id = ft.id
 	INNER JOIN fiscalidade_services AS fs
     ON fts.service_id = fs.id

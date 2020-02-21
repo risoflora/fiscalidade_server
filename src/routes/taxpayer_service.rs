@@ -5,7 +5,7 @@ use super::{
     ApiError,
 };
 use crate::db::{self, Conn};
-use crate::models::taxpayer_service::{InsertableTaxpayerService, UpdatableTaxpayerService};
+use crate::models::taxpayer_service::InsertableTaxpayerService;
 
 #[post("/taxpayers/services", data = "<taxpayer_service>")]
 pub fn create(
@@ -24,28 +24,12 @@ pub fn unauthorized(conn: Conn, _auth: AuthAdmin) -> Result<JsonValue, ApiError>
     Ok(json_ok!(db::taxpayer_service::unauthorized(&conn)?))
 }
 
-#[post("/taxpayers/services/authorize", data = "<taxpayer_service>")]
-pub fn authorize(
-    conn: Conn,
-    _auth: Auth,
-    taxpayer_service: Json<InsertableTaxpayerService>,
-) -> Result<JsonValue, ApiError> {
-    Ok(json_ok!(db::taxpayer_service::authorize(
-        &conn,
-        &taxpayer_service
-    )?))
+#[post("/taxpayers/services/authorize/<id>")]
+pub fn authorize(conn: Conn, _auth: Auth, id: i64) -> Result<JsonValue, ApiError> {
+    Ok(json_ok!(db::taxpayer_service::authorize(&conn, id)?))
 }
 
-#[post("/taxpayers/services/unauthorize/<id>", data = "<taxpayer_service>")]
-pub fn unauthorize(
-    conn: Conn,
-    _auth: Auth,
-    id: i64,
-    mut taxpayer_service: Json<UpdatableTaxpayerService>,
-) -> Result<JsonValue, ApiError> {
-    Ok(json_ok!(db::taxpayer_service::unauthorize(
-        &conn,
-        id,
-        &mut taxpayer_service
-    )?))
+#[put("/taxpayers/services/unauthorize/<id>")]
+pub fn unauthorize(conn: Conn, _auth: Auth, id: i64) -> Result<JsonValue, ApiError> {
+    Ok(json_ok!(db::taxpayer_service::unauthorize(&conn, id)?))
 }

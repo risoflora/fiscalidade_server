@@ -20,15 +20,6 @@ pub struct InsertableTaxpayerService {
     pub service_id: i64,
 }
 
-#[derive(Deserialize, AsChangeset)]
-#[table_name = "taxpayers_services"]
-pub struct UpdatableTaxpayerService {
-    pub taxpayer_id: i64,
-    pub service_id: i64,
-    #[serde(skip_deserializing)]
-    pub allowed_at: Option<NaiveDateTime>,
-}
-
 #[derive(Serialize, Queryable, Identifiable, Associations)]
 #[table_name = "taxpayers_services_view"]
 #[primary_key(taxpayer_id, service_id)]

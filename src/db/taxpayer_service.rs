@@ -1,9 +1,9 @@
+use chrono::NaiveDateTime;
 use diesel::{dsl, ExpressionMethods, PgConnection, QueryDsl, RunQueryDsl};
 
 use crate::db::{schema::fiscalidade_taxpayers_services_view as taxpayers_services_view, Error};
 use crate::models::taxpayer_service::{
-    InsertableTaxpayerService, QueryableTaxpayerService, UpdatableTaxpayerService,
-    ViewableTaxpayerService,
+    InsertableTaxpayerService, QueryableTaxpayerService, ViewableTaxpayerService,
 };
 use crate::schema::fiscalidade_taxpayers_services as taxpayers_services;
 
@@ -33,29 +33,21 @@ pub fn unauthorized(conn: &PgConnection) -> Result<Vec<ViewableTaxpayerService>,
         .load(conn)?)
 }
 
-pub fn authorize(
-    conn: &PgConnection,
-    taxpayer_service: &InsertableTaxpayerService,
-) -> Result<Option<QueryableTaxpayerService>, Error> {
-    let taxpayer_service = diesel::update(
-        taxpayers_services::table
-            .filter(taxpayers_services::taxpayer_id.eq(taxpayer_service.taxpayer_id))
-            .filter(taxpayers_services::service_id.eq(taxpayer_service.service_id)),
-    )
-    .set(taxpayers_services::allowed_at.eq(dsl::now))
-    .get_result(conn)?;
+pub fn authorize(conn: &PgConnection, id: i64) -> Result<Option<QueryableTaxpayerService>, Error> {
+    let taxpayer_service =
+        diesel::update(taxpayers_services::table.filter(taxpayers_services::id.eq(id)))
+            .set(taxpayers_services::allowed_at.eq(dsl::now))
+            .get_result(conn)?;
     Ok(Some(taxpayer_service))
 }
 
 pub fn unauthorize(
     conn: &PgConnection,
     id: i64,
-    taxpayer_service: &mut UpdatableTaxpayerService,
 ) -> Result<Option<QueryableTaxpayerService>, Error> {
-    taxpayer_service.allowed_at = None;
     let taxpayer_service =
         diesel::update(taxpayers_services::table.filter(taxpayers_services::id.eq(id)))
-            .set(&*taxpayer_service)
+            .set(taxpayers_services::allowed_at.eq(None as Option<NaiveDateTime>))
             .get_result(conn)?;
     Ok(Some(taxpayer_service))
 }

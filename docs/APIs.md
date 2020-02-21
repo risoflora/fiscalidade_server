@@ -141,8 +141,8 @@ APIs:
 | --: | ------ | -------------------------------------- | -------------- | ----------------------------------------------------------- |
 |   1 | `POST` | `/taxpayers/services`                  | Privada        | Cria solicitação de atribuição de serviço para contribuinte |
 |   2 | `GET`  | `/taxpayers/services/unauthorized`     | Administrativa | Lista serviços ainda não autorizados para contribuintes     |
-|   3 | `POST` | `/taxpayers/services/authorize`        | Privada        | Autoriza serviço para contribuinte                          |
-|   4 | `POST` | `/taxpayers/services/unauthorize/<id>` | Privada        | Desautoriza serviço de contribuinte                         |
+|   3 | `POST` | `/taxpayers/services/authorize/<id>`   | Privada        | Autoriza serviço para contribuinte                          |
+|   4 | `PUT`  | `/taxpayers/services/unauthorize/<id>` | Privada        | Desautoriza serviço de contribuinte                         |
 
 Dados:
 
