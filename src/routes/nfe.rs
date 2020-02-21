@@ -1,4 +1,4 @@
-use anyhow;
+use anyhow::anyhow;
 use fiscalidade::{Ambiente, Dfe, DfeError, Documento, Pkcs12Certificate, Tipo, Uf, Xml};
 use rocket::State;
 use rocket_contrib::json::JsonValue;

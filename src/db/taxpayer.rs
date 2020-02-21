@@ -1,3 +1,4 @@
+use anyhow::anyhow;
 use diesel::{ExpressionMethods, PgConnection, QueryDsl, RunQueryDsl};
 
 use crate::db::Error;
@@ -30,6 +31,9 @@ pub fn update(
 }
 
 pub fn delete(conn: &PgConnection, id: i64) -> Result<QueryableTaxpayer, Error> {
+    if id == 1 {
+        return Err(anyhow!("Não é possível excluir o administrador padrão do servidor").into());
+    }
     Ok(diesel::delete(taxpayers::table.find(id)).get_result(conn)?)
 }
 

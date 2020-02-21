@@ -13,4 +13,6 @@ pub struct Conn(PgConnection);
 pub enum Error {
     #[error(transparent)]
     Diesel(#[from] diesel::result::Error),
+    #[error(transparent)]
+    Other(#[from] anyhow::Error),
 }
