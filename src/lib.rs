@@ -128,6 +128,7 @@ pub fn rocket() -> anyhow::Result<rocket::Rocket> {
                 routes::version,
                 routes::info,
                 cache::list,
+                taxpayer::create_admin,
                 taxpayer::create,
                 taxpayer::update,
                 taxpayer::delete,

@@ -47,7 +47,7 @@ dentre outros.
 
 ## Versão
 
-APIs:
+API:
 
 | Método | Caminho (path) | Tipo    | Utilidade                  |
 | ------ | -------------- | ------- | -------------------------- |
@@ -63,7 +63,7 @@ Dados:
 
 ## Informação
 
-APIs:
+API:
 
 | Método | Caminho (path) | Tipo    | Utilidade                          |
 | ------ | -------------- | ------- | ---------------------------------- |
@@ -79,6 +79,14 @@ Dados:
 | `authors`   | `String`  | Autores do projeto              |
 | `arch`      | `String`  | Arquitetura do servidor         |
 | `os`        | `String`  | Sistema operacional do servidor |
+
+## Administrador
+
+API:
+
+| Método | Caminho (path)     | Tipo    | Utilidade                                    |
+| ------ | ------------------ | ------- | -------------------------------------------- |
+| `POST` | `/taxpayers/admin` | Publica | Cria um administrador padrão para o servidor |
 
 ## Contribuintes (Taxpayers)
 

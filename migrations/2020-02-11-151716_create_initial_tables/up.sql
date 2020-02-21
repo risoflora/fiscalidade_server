@@ -67,31 +67,6 @@ CREATE TABLE IF NOT EXISTS fiscalidade_caches (
   created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
--- Insere usuário padrão (admin)
-INSERT INTO fiscalidade_taxpayers (
-    name,
-    business_name,
-    registry,
-    email,
-    certificate,
-    certificate_password,
-    token,
-    manager
-  )
-VALUES
-  (
-    'admin',
-    'Administrador',
-    '',
-    '',
-    '',
-    '',
-    'yBtY7BaUiGIHMEXzs1UUdr',
-    true
-  )
-ON CONFLICT (name, business_name, registry, email, token)
-DO NOTHING;
-
 -- Insere serviços disponíveis.
 INSERT INTO fiscalidade_services (description, slug)
 VALUES

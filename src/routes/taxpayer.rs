@@ -4,6 +4,11 @@ use super::{auth::AuthAdmin, ApiError};
 use crate::db::{self, Conn};
 use crate::models::taxpayer::{InsertableTaxpayer, UpdatableTaxpayer};
 
+#[post("/taxpayers/admin")]
+pub fn create_admin(conn: Conn) -> Result<JsonValue, ApiError> {
+    Ok(json_ok!(db::taxpayer::create_admin(&conn)?))
+}
+
 #[post("/taxpayers", data = "<taxpayer>")]
 pub fn create(conn: Conn, mut taxpayer: Json<InsertableTaxpayer>) -> Result<JsonValue, ApiError> {
     Ok(json_ok!(db::taxpayer::create(&conn, &mut taxpayer)?))
