@@ -30,13 +30,7 @@ fn print_help(program: &str, opts: &GetOptsOptions) {
 }
 
 fn print_version() {
-    println!(
-        "{} {} ({}-{})",
-        utils::APP_NAME,
-        utils::APP_VERSION,
-        utils::APP_OS,
-        utils::APP_ARCH,
-    );
+    println!("{}", version!());
     process::exit(0);
 }
 

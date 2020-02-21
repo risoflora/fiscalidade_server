@@ -45,6 +45,14 @@ ou:
 
 dentre outros.
 
+## Geral
+
+APIs:
+
+| Método | Caminho (path) | Tipo    | Utilidade                  |
+| ------ | -------------- | ------- | -------------------------- |
+| `GET`  | `/version`     | Pública | Exibe a versão do servidor |
+
 ## Contribuintes (Taxpayers)
 
 APIs:

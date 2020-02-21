@@ -30,6 +30,18 @@ macro_rules! json_error {
     };
 }
 
+macro_rules! version {
+    () => {
+        format!(
+            "{} {} ({}-{})",
+            crate::utils::APP_NAME,
+            crate::utils::APP_VERSION,
+            crate::utils::APP_OS,
+            crate::utils::APP_ARCH
+        )
+    };
+}
+
 #[inline]
 pub fn generate_token() -> String {
     const TOKEN_CHARS: [char; 62] = [

@@ -6,6 +6,7 @@ use rocket::{
     request::Request,
     response::{self, status, Responder},
 };
+use rocket_contrib::json::JsonValue;
 use thiserror::Error;
 
 pub mod auth;
@@ -36,4 +37,9 @@ impl<'r> Responder<'r> for ApiError {
     fn respond_to(self, req: &Request) -> response::Result<'r> {
         status::Custom(Status::UnprocessableEntity, json_error!(self.to_string())).respond_to(req)
     }
+}
+
+#[get("/version")]
+pub fn version() -> JsonValue {
+    json_ok!(version!())
 }
