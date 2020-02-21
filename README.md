@@ -79,7 +79,7 @@ Siga as instruções iniciais de uso em [docs/Uso.md](docs/Uso.md). Para instru�
 
 - [ ] embutir arquivo de serviço no executável
 - [ ] embutir arquivo de webservice no executável
-- [ ] daemon/serviço
+- [ ] linkar libpq estaticamente
 - [ ] configuração via yaml
 - [ ] paginação de dados
 - [ ] mais serviços como envio de lote, consulta de recibo, inutilização, distribuição de DFe, etc.
