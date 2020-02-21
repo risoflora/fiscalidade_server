@@ -146,13 +146,15 @@ APIs:
 
 Dados:
 
-| Campo         | Tipo            | 1 2 3 4 | Descrição          |
-| ------------- | --------------- | ------- | ------------------ |
-| `id`          | `i64`           | N S S N | Identificador      |
-| `taxpayer_id` | `i64`           | S S S S | ID do contribuinte |
-| `service_id`  | `i64`           | S S S S | ID do serviço      |
-| `allowed_at`  | `NaiveDateTime` | N S S S | Data de liberação  |
-| `created_at`  | `NaiveDateTime` | N S S S | Data de cadastro   |
+| Campo                 | Tipo            | 1 2 3 4 | Descrição            |
+| --------------------- | --------------- | ------- | -------------------- |
+| `id`                  | `i64`           | N S S N | Identificador        |
+| `taxpayer_id`         | `i64`           | S S S S | ID do contribuinte   |
+| `taxpayer_name`       | `String`        | N S N N | Nome do contribuinte |
+| `service_id`          | `i64`           | S S S S | ID do serviço        |
+| `service_description` | `String`        | N S N N | Descrição do serviço |
+| `allowed_at`          | `NaiveDateTime` | N S S S | Data de liberação    |
+| `created_at`          | `NaiveDateTime` | N S S S | Data de cadastro     |
 
 ## NF-e
 

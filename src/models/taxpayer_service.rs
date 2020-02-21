@@ -1,5 +1,7 @@
 use chrono::NaiveDateTime;
 
+use crate::db::schema::fiscalidade_taxpayers_services_view as taxpayers_services_view;
+use crate::models::taxpayer::QueryableTaxpayer;
 use crate::schema::fiscalidade_taxpayers_services as taxpayers_services;
 
 #[derive(Serialize, Queryable)]
@@ -25,4 +27,18 @@ pub struct UpdatableTaxpayerService {
     pub service_id: i64,
     #[serde(skip_deserializing)]
     pub allowed_at: Option<NaiveDateTime>,
+}
+
+#[derive(Serialize, Queryable, Identifiable, Associations)]
+#[table_name = "taxpayers_services_view"]
+#[primary_key(taxpayer_id, service_id)]
+#[belongs_to(QueryableTaxpayer, foreign_key = "taxpayer_id")]
+pub struct ViewableTaxpayerService {
+    pub id: i64,
+    pub taxpayer_id: i64,
+    pub taxpayer_name: String,
+    pub service_id: i64,
+    pub service_description: String,
+    pub allowed_at: Option<NaiveDateTime>,
+    pub created_at: NaiveDateTime,
 }

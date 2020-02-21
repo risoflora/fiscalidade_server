@@ -2,6 +2,7 @@ use diesel::PgConnection;
 use thiserror::Error;
 
 pub mod cache;
+pub mod schema;
 pub mod service;
 pub mod taxpayer;
 pub mod taxpayer_service;

@@ -1,8 +1,9 @@
 use diesel::{dsl, ExpressionMethods, PgConnection, QueryDsl, RunQueryDsl};
 
-use crate::db::Error;
+use crate::db::{schema::fiscalidade_taxpayers_services_view as taxpayers_services_view, Error};
 use crate::models::taxpayer_service::{
     InsertableTaxpayerService, QueryableTaxpayerService, UpdatableTaxpayerService,
+    ViewableTaxpayerService,
 };
 use crate::schema::fiscalidade_taxpayers_services as taxpayers_services;
 
@@ -26,9 +27,9 @@ pub fn by_taxpayer_and_service(
         .get_result(conn)?)
 }
 
-pub fn unauthorized(conn: &PgConnection) -> Result<Vec<QueryableTaxpayerService>, Error> {
-    Ok(taxpayers_services::table
-        .filter(taxpayers_services::allowed_at.is_null())
+pub fn unauthorized(conn: &PgConnection) -> Result<Vec<ViewableTaxpayerService>, Error> {
+    Ok(taxpayers_services_view::table
+        .filter(taxpayers_services_view::allowed_at.is_null())
         .load(conn)?)
 }
 
