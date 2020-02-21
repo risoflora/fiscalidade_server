@@ -1,5 +1,5 @@
 use anyhow::anyhow;
-use diesel::{ExpressionMethods, PgConnection, QueryDsl, RunQueryDsl};
+use diesel::{dsl, ExpressionMethods, PgConnection, QueryDsl, RunQueryDsl};
 
 use crate::db::Error;
 use crate::models::taxpayer::{InsertableTaxpayer, QueryableTaxpayer, UpdatableTaxpayer};
@@ -14,6 +14,11 @@ pub fn create(
     conn: &PgConnection,
     taxpayer: &mut InsertableTaxpayer,
 ) -> Result<QueryableTaxpayer, Error> {
+    if diesel::select(dsl::exists(taxpayers::table.filter(taxpayers::id.eq(1)))).get_result(conn)
+        == Ok(false)
+    {
+        return Err(anyhow!("Não existe um administrador padrão para o servidor").into());
+    }
     taxpayer.token = utils::generate_token();
     Ok(diesel::insert_into(taxpayers::table)
         .values(&*taxpayer)
@@ -25,6 +30,9 @@ pub fn update(
     id: i64,
     taxpayer: &UpdatableTaxpayer,
 ) -> Result<QueryableTaxpayer, Error> {
+    if id == 1 {
+        return Err(anyhow!("Não é possível alterar o administrador padrão do servidor").into());
+    }
     Ok(diesel::update(taxpayers::table.find(id))
         .set(taxpayer)
         .get_result(conn)?)
