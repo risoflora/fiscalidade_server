@@ -6,16 +6,16 @@ use crate::models::taxpayer::{InsertableTaxpayer, QueryableTaxpayer, UpdatableTa
 use crate::schema::fiscalidade_taxpayers as taxpayers;
 use crate::utils;
 
-fn exists_admin(conn: &PgConnection) -> bool {
+fn exists_manager(conn: &PgConnection) -> bool {
     diesel::select(dsl::exists(taxpayers::table.filter(taxpayers::id.eq(1)))).get_result(conn)
         == Ok(true)
 }
 
-pub fn create_admin(conn: &PgConnection) -> Result<QueryableTaxpayer, Error> {
-    if exists_admin(conn) {
+pub fn create_manager(conn: &PgConnection) -> Result<QueryableTaxpayer, Error> {
+    if exists_manager(conn) {
         return Err(anyhow!("Já existe um administrador padrão para o servidor").into());
     }
-    let taxpayer = InsertableTaxpayer {
+    let manager = InsertableTaxpayer {
         name: "admin".into(),
         business_name: "Administrador".into(),
         registry: Default::default(),
@@ -24,23 +24,23 @@ pub fn create_admin(conn: &PgConnection) -> Result<QueryableTaxpayer, Error> {
         certificate_password: Default::default(),
         token: utils::generate_token(),
     };
-    let taxpayer: QueryableTaxpayer = diesel::insert_into(taxpayers::table)
-        .values(taxpayer)
+    let manager: QueryableTaxpayer = diesel::insert_into(taxpayers::table)
+        .values((manager, taxpayers::manager.eq(true)))
         .get_result(conn)?;
-    if taxpayer.id != 1 {
-        self::delete(conn, taxpayer.id)?;
+    if manager.id != 1 {
+        self::delete(conn, manager.id)?;
         return Err(
             anyhow!("Ocorreu um erro ao cadastrar administrador padrão para o servidor").into(),
         );
     };
-    Ok(taxpayer)
+    Ok(manager)
 }
 
 pub fn create(
     conn: &PgConnection,
     taxpayer: &mut InsertableTaxpayer,
 ) -> Result<QueryableTaxpayer, Error> {
-    if !exists_admin(conn) {
+    if !exists_manager(conn) {
         return Err(anyhow!("Não existe um administrador padrão para o servidor").into());
     }
     taxpayer.token = utils::generate_token();

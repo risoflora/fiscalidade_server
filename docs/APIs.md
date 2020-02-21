@@ -84,9 +84,9 @@ Dados:
 
 API:
 
-| Método | Caminho (path)     | Tipo    | Utilidade                                    |
-| ------ | ------------------ | ------- | -------------------------------------------- |
-| `POST` | `/taxpayers/admin` | Publica | Cria um administrador padrão para o servidor |
+| Método | Caminho (path)       | Tipo    | Utilidade                                    |
+| ------ | -------------------- | ------- | -------------------------------------------- |
+| `POST` | `/taxpayers/manager` | Publica | Cria um administrador padrão para o servidor |
 
 ## Contribuintes (Taxpayers)
 
