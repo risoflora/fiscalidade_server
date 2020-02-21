@@ -72,3 +72,31 @@ cargo run --release -- -m \
 ```
 
 Para mais informações, use o menu de ajuda da aplicação: `cargo run --release -- -h`.
+
+## Definindo administrador padrão do servidor
+
+Antes de prosseguir com os passos seguintes, verifique se o servidor está online. Para isto, basta consultar sua versão, por exemplo:
+
+```bash
+curl -w '\n' http://localhost:8080/fiscalidade/v1/version
+```
+
+ele deve retornar um JSON com a versão do servidor, exemplo:
+
+```
+{"status":"ok","result":{"major":1,"minor":0,"patch":0}}
+```
+
+feito isso, agora podemos definir um administrador para gerenciamento do servidor:
+
+```bash
+curl -w '\n' -X POST http://localhost:8080/fiscalidade/v1/taxpayers/manager
+```
+
+retorno:
+
+```
+{"status":"ok","result":{"id":1,"name":"admin","business_name":"Administrador","registry":"","email":"","certificate":"","certificate_password":"","token":"qoNrF2mZsSUpZCEXUw2Mxx","manager":true,"active":true,"created_at":"2020-02-21T18:50:58.795898"}}
+```
+
+Observe o token gerado: `qoNrF2mZsSUpZCEXUw2Mxx`. **Guarde ele em um local seguro!** Este será o token do administrador padrão do servidor. Usaremos ele nos passos a seguir.
