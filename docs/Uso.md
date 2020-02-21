@@ -100,3 +100,51 @@ retorno:
 ```
 
 Observe o token gerado: `qoNrF2mZsSUpZCEXUw2Mxx`. **Guarde ele em um local seguro!** Este será o token do administrador padrão do servidor. Usaremos ele nos passos a seguir.
+
+## Cadastrando contribuinte
+
+Considerando que o certificado do contribuinte encontra-se em `~/Downloads/certificado.pfx`:
+
+```bash
+curl -w '\n' \
+    -H "Content-Type: application/json" \
+    -X POST \
+    -d '{"name":"Fulano","business_name":"Fulano de tal","registry":"123456789","email":"fulano@gmail","certificate":"'$(base64 -w 0 $HOME/Downloads/certificado.pfx)'","certificate_password":"12345678"}' \
+    http://localhost:8080/fiscalidade/v1/taxpayers
+```
+
+o servidor deve retornar o seguinte JSON:
+
+```
+{"status":"ok","result":{"id":2,"name":"Fulano","business_name":"Fulano de tal","registry":"123456789","email":"fulano@gmail","certificate":"MIIkEAIB...=","certificate_password":"12345678","token":"U8pNjWuAdj2PB3AGnai7mT","manager":false,"active":true,"created_at":"2020-02-21T19:04:22.374504"}}
+```
+
+agora, com o contribuinte cadastrado, podemos fazer uma solicitação de uso de serviço. Para consultar a lista de serviços disponíveis, use:
+
+```bash
+curl -w '\n' \
+    http://localhost:8080/fiscalidade/v1/services
+```
+
+retorno:
+
+```
+{"status":"ok","result":[{"id":1,"description":"NF-e","slug":"nfe","active":true,"created_at":"2020-02-21T18:50:38.268453"}]}
+```
+
+por fim, solicitamos o serviço NF-e para contribuinte cadastrado:
+
+```bash
+curl -w '\n' \
+    -H 'X-Auth-Token: U8pNjWuAdj2PB3AGnai7mT' \
+    -H "Content-Type: application/json" \
+    -X POST \
+    -d '{"taxpayer_id":2,"service_id":1}' \
+    http://localhost:8080/fiscalidade/v1/taxpayers/services
+```
+
+retorno:
+
+```
+{"status":"ok","result":{"id":1,"taxpayer_id":2,"service_id":1,"allowed_at":null,"created_at":"2020-02-21T19:08:58.390814"}}
+```
