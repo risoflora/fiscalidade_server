@@ -1,8 +1,12 @@
 [package]
 name = "fiscalidade_server"
 description = "Servidor REST para envio e consulta de XMLs de Documentos Fiscais da SEFAZ."
-version = "0.5.0"
+version = "0.5.1"
 authors = ["Silvio Clécio <silvioprog@gmail.com>"]
+
+[features]
+default = ["embed_webservices"]
+embed_webservices = ["fiscalidade/embed_webservices"]
 
 [dependencies]
 rocket = "^0.4"
@@ -12,14 +16,10 @@ diesel_migrations = { version = "^1", default-features = false, features = ["pos
 serde_json = { version = "^1", features = ["preserve_order"] }
 serde = "^1"
 serde_derive = "^1"
-fiscalidade = { git = "https://github.com/risoflora/fiscalidade" }
+fiscalidade = "^0.4"
 anyhow = "^1"
 thiserror = "^1"
 getopts = "^0.2"
 chrono = { version = "^0.4", features = ["serde"] }
 nanoid = { git = "https://github.com/nikolay-govorov/nanoid" }
 base64 = "^0.11"
-
-[features]
-default = ["embed-webservices"]
-embed-webservices = []
