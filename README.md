@@ -78,7 +78,7 @@ Siga as instruções iniciais de uso em [docs/Uso.md](docs/Uso.md). Para instru�
 ## Wishlist
 
 - [ ] embutir arquivo de serviço no executável
-- [ ] embutir arquivo de webservice no executável
+- [x] embutir arquivo de webservice no executável
 - [ ] linkar libpq estaticamente
 - [ ] configuração via yaml
 - [ ] paginação de dados

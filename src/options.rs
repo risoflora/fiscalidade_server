@@ -33,6 +33,7 @@ fn print_version() {
 pub struct Options {
     pub port: u16,
     pub database: String,
+    #[cfg(not(feature = "embed-webservices"))]
     pub webservices: String,
     pub migrations: bool,
     pub silent: bool,
@@ -51,6 +52,7 @@ impl Options {
             "Banco de dados",
             "postgres://postgres:postgres@localhost/postgres",
         );
+        #[cfg(not(feature = "embed-webservices"))]
         opts.reqopt(
             "w",
             "webservices",
@@ -75,6 +77,7 @@ impl Options {
                 Err(_) => return Err(anyhow!("Invalid port")),
             },
             database: args.opt_get("d")?.unwrap(),
+            #[cfg(not(feature = "embed-webservices"))]
             webservices: args.opt_get("w")?.unwrap(),
             migrations: args.opt_present("m"),
             silent: args.opt_present("s"),

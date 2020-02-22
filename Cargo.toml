@@ -1,7 +1,7 @@
 [package]
 name = "fiscalidade_server"
 description = "Servidor REST para envio e consulta de XMLs de Documentos Fiscais da SEFAZ."
-version = "0.4.1"
+version = "0.5.0"
 authors = ["Silvio Clécio <silvioprog@gmail.com>"]
 
 [dependencies]
@@ -19,3 +19,7 @@ getopts = "^0.2"
 chrono = { version = "^0.4", features = ["serde"] }
 nanoid = { git = "https://github.com/nikolay-govorov/nanoid" }
 base64 = "^0.11"
+
+[features]
+default = ["embed-webservices"]
+embed-webservices = []

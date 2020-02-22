@@ -104,7 +104,11 @@ pub fn rocket() -> anyhow::Result<rocket::Rocket> {
     let mut databases = HashMap::new();
     database_config.insert("url", Value::from(database));
     databases.insert("db::conn", Value::from(database_config));
-    let webservices = match WebServices::from_file(&opts.webservices) {
+    #[cfg(not(feature = "embed-webservices"))]
+    let webservices = WebServices::from_file(&opts.webservices);
+    #[cfg(feature = "embed-webservices")]
+    let webservices = WebServices::from_embedded();
+    let webservices = match webservices {
         Ok(webservices) => webservices,
         Err(err) => return Err(anyhow!("Failed to load webservices file: {}", err)),
     };
