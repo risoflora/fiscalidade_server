@@ -13,6 +13,7 @@ extern crate serde_derive;
 
 extern crate anyhow;
 extern crate chrono;
+extern crate dotenv;
 extern crate fiscalidade;
 extern crate getopts;
 extern crate nanoid;
@@ -25,19 +26,22 @@ use std::{collections::HashMap, io::stdout};
 use anyhow::anyhow;
 use diesel::{Connection, PgConnection};
 use fiscalidade::WebServices;
-use rocket::config::{Config, Environment, Limits, LoggingLevel, Value};
+use rocket::config::{Config as RocketConfig, Environment, Limits, LoggingLevel, Value};
 use rocket_contrib::json::JsonValue;
 
 #[macro_use]
 mod utils;
 
 mod args;
+mod config;
 mod db;
 mod models;
 mod options;
 mod routes;
 mod schema;
 
+use crate::args::Args;
+use crate::config::Config;
 use crate::db::Conn;
 use crate::options::Options;
 use crate::routes::{cache, nfe, services, taxpayer, taxpayer_service};
@@ -45,6 +49,15 @@ use crate::routes::{cache, nfe, services, taxpayer, taxpayer_service};
 #[derive(Clone)]
 pub struct AppData {
     pub webservices: WebServices,
+}
+
+pub struct AppProps {
+    pub port: u16,
+    pub database: String,
+    #[cfg(not(feature = "embed_webservices"))]
+    pub webservices: String,
+    pub migrations: bool,
+    pub silent: bool,
 }
 
 #[catch(400)]
@@ -90,7 +103,12 @@ fn service_unavailable() -> JsonValue {
 embed_migrations!();
 
 pub fn rocket() -> anyhow::Result<rocket::Rocket> {
-    let opts = Options::from_args()?;
+    let args = Args::new();
+    let opts: AppProps = if args.len() > 1 {
+        Options::from_args(args)?.into()
+    } else {
+        Config::from_file("config/fiscalidade_server.conf")?.into()
+    };
     let database = opts.database;
     if opts.migrations {
         let conn = PgConnection::establish(&database)?;
@@ -113,7 +131,7 @@ pub fn rocket() -> anyhow::Result<rocket::Rocket> {
         Err(err) => return Err(anyhow!("Failed to load webservices file: {}", err)),
     };
     let limits = Limits::new().limit("forms", 512 * 1024);
-    let config = Config::build(Environment::Production)
+    let config = RocketConfig::build(Environment::Production)
         .extra("databases", databases)
         .port(opts.port)
         .limits(limits)

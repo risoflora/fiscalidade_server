@@ -79,8 +79,8 @@ Siga as instruções iniciais de uso em [docs/Uso.md](docs/Uso.md). Para instru�
 
 - [ ] embutir arquivo de serviço no executável
 - [x] embutir arquivo de webservice no executável
-- [ ] linkar libpq estaticamente
-- [ ] configuração via yaml
+- [ ] criar AppImage
+- [x] configuração via arquivo
 - [ ] paginação de dados
 - [ ] mais serviços como envio de lote, consulta de recibo, inutilização, distribuição de DFe, etc.
 - [ ] compressão de dados

@@ -3,6 +3,7 @@ use std::process;
 use anyhow::anyhow;
 use getopts::Options as GetOptsOptions;
 
+use super::AppProps;
 use crate::args::Args;
 use crate::utils::Info;
 
@@ -40,8 +41,7 @@ pub struct Options {
 }
 
 impl Options {
-    pub fn from_args() -> anyhow::Result<Options> {
-        let args = Args::new();
+    pub fn from_args(args: Args) -> anyhow::Result<Options> {
         let mut opts = GetOptsOptions::new();
         opts.optflag("h", "help", "Imprime este menu de ajuda");
         opts.optflag("v", "version", "Imprime versão da aplicação");
@@ -82,5 +82,18 @@ impl Options {
             migrations: args.opt_present("m"),
             silent: args.opt_present("s"),
         })
+    }
+}
+
+impl From<Options> for AppProps {
+    fn from(opts: Options) -> Self {
+        Self {
+            port: opts.port,
+            database: opts.database,
+            #[cfg(not(feature = "embed_webservices"))]
+            webservices: opts.webservices,
+            migrations: opts.migrations,
+            silent: opts.silent,
+        }
     }
 }
