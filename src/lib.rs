@@ -13,6 +13,7 @@ extern crate serde_derive;
 
 extern crate anyhow;
 extern crate chrono;
+extern crate dirs;
 extern crate dotenv;
 extern crate fiscalidade;
 extern crate getopts;
@@ -104,6 +105,7 @@ embed_migrations!();
 
 pub fn rocket() -> anyhow::Result<rocket::Rocket> {
     let args = Args::new();
+    println!("{}", Config::filename());
     let opts: AppProps = if args.len() > 1 {
         Options::from_args(args)?.into()
     } else {

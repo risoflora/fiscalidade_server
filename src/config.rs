@@ -1,6 +1,7 @@
 use std::path::Path;
 
 use crate::anyhow;
+use dirs;
 use dotenv;
 
 use super::AppProps;
@@ -15,6 +16,22 @@ pub struct Config {
 }
 
 impl Config {
+    pub fn dir() -> String {
+        format!(
+            "{}/{}",
+            dirs::config_dir()
+                .unwrap_or_default()
+                .into_os_string()
+                .into_string()
+                .unwrap_or_default(),
+            env!("CARGO_PKG_NAME")
+        )
+    }
+
+    pub fn filename() -> String {
+        format!("{}/{}.conf", Self::dir(), env!("CARGO_PKG_NAME"))
+    }
+
     pub fn from_file<P: AsRef<Path>>(path: P) -> anyhow::Result<Config> {
         dotenv::from_filename(path)?;
         Ok(Config {
