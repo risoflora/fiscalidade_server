@@ -77,9 +77,9 @@ Siga as instruções iniciais de uso em [docs/Uso.md](docs/Uso.md). Para instru�
 
 ## Wishlist
 
+- [ ] criar AppImage
 - [ ] embutir arquivo de serviço no executável
 - [x] embutir arquivo de webservice no executável
-- [ ] criar AppImage
 - [x] configuração via arquivo
 - [ ] paginação de dados
 - [ ] mais serviços como envio de lote, consulta de recibo, inutilização, distribuição de DFe, etc.
@@ -88,7 +88,6 @@ Siga as instruções iniciais de uso em [docs/Uso.md](docs/Uso.md). Para instru�
 - [ ] documentação
 - [ ] exemplos de uso com cURL
 - [ ] imagem Docker
-- [ ] adicionar instruções para build
 
 ## Contribuições
 
