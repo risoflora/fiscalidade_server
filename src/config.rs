@@ -1,4 +1,5 @@
 use std::{
+    fmt,
     fs::{self, File},
     io::{self, Write},
     path::Path,
@@ -25,9 +26,7 @@ impl Config {
         let filename = Self::filename();
         if !Path::new(&filename).exists() {
             let mut file = File::create(&filename)?;
-            file.write_all(
-                b"port=8080\ndatabase=postgres://postgres:postgres@localhost/postgres\nwebservices=\nmigrations=true\nsilent=true\n",
-            )?;
+            file.write_all(Self::default().to_string().as_bytes())?;
         }
         Ok(())
     }
@@ -58,6 +57,38 @@ impl Config {
             migrations: dotenv::var("migrations")?.parse::<bool>()?,
             silent: dotenv::var("silent")?.parse::<bool>()?,
         })
+    }
+}
+
+impl Default for Config {
+    fn default() -> Self {
+        Self {
+            port: 8080,
+            database: String::from("postgres://postgres:postgres@localhost/postgres"),
+            #[cfg(not(feature = "embed_webservices"))]
+            webservices: Default::default(),
+            migrations: true,
+            silent: true,
+        }
+    }
+}
+
+impl fmt::Display for Config {
+    #[cfg(feature = "embed_webservices")]
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(
+            f,
+            "port={}\ndatabase={}\nmigrations={}\nsilent={}",
+            self.port, self.database, self.migrations, self.silent,
+        )
+    }
+    #[cfg(not(feature = "embed_webservices"))]
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(
+            f,
+            "port={}\ndatabase={}\nwebservices={}\nmigrations={}\nsilent={}",
+            self.port, self.database, self.webservices, self.migrations, self.silent,
+        )
     }
 }
 
