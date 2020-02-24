@@ -1,8 +1,11 @@
 [package]
 name = "fiscalidade_server"
 description = "Servidor REST para envio e consulta de XMLs de Documentos Fiscais da SEFAZ."
-version = "0.6.2"
+version = "0.6.3"
 authors = ["Silvio Clécio <silvioprog@gmail.com>"]
+
+[profile.release]
+lto = true
 
 [features]
 default = ["embed_webservices"]
