@@ -88,6 +88,7 @@ Siga as instruções iniciais de uso em [docs/Uso.md](docs/Uso.md). Para instru�
 - [ ] documentação
 - [ ] exemplos de uso com cURL
 - [ ] imagem Docker
+- [ ] adicionar instruções para build
 
 ## Contribuições
 

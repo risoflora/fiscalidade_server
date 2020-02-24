@@ -217,7 +217,6 @@ Listando serviços solicitados:
 ```bash
 curl -s \
     -H 'X-Auth-Token: qoNrF2mZsSUpZCEXUw2Mxx' \
-    -H "Content-Type: application/json" \
     http://localhost:8080/fiscalidade/v1/taxpayers/services/unauthorized | jsonpp
 ```
 
