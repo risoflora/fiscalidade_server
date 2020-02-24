@@ -2,8 +2,9 @@
 
 Os passos a seguir preparam um ambiente para rodar o `fiscalidade_server` no Windows ou Linux. Serão necessárias as seguintes ferramentas:
 
-- PostgreSQL
-- Docker (opcional)
+- [PostgreSQL](https://www.postgresql.org)
+- [Docker](https://www.docker.com) (opcional)
+- [jsonpp](https://crates.io/crates/jsonpp) (opcional)
 - Executável do Fiscalidade Server
 
 ## Instalando o PostgreSQL
@@ -31,7 +32,7 @@ docker run --name pgadmin4 -d \
     --restart unless-stopped dpage/pgadmin4
 ```
 
-Agora basta acessar `http://localhost` e verificar se tudo ocorreu bem.
+Agora basta acessar o pgAdmin em `http://localhost` para verificar se tudo ocorreu bem.
 
 ## Executando o `fiscalidade_server`
 
@@ -40,15 +41,13 @@ Uma vez com o PostgreSQL instalado, basta executar o Fiscalidade Server e ele se
 ```bash
 cargo run --release -- -m \
     -p 8080 \
-    -d postgres://postgres:postgres@172.17.0.1/postgres \
-    -w resources/webservices.ini
+    -d postgres://postgres:postgres@172.17.0.1/postgres
 ```
 
 Explicando os parâmetros do comando acima:
 
 - `-p 8080` - Porta do servidor. Onde a API será disponibilizada, ex: `http://localhost:8080/fiscalidade/v1/taxpayers/services`.
 - `-d postgres://postgres:postgres@localhost/postgres` - Caminho (path) para o banco de dados. Neste caso, usando o DB padrão, `postgres`.
-- `-w resources/webservices.ini` - Arquivo de webservices. Também disponível [aqui](https://github.com/risoflora/fiscalidade/tree/master/resources).
 - `-m` - Executa scripts para criação (ou atualização) do banco de dados.
 
 Se tudo ocorrer bem, será exibido o seguinte resultado no terminal:
@@ -56,8 +55,7 @@ Se tudo ocorrer bem, será exibido o seguinte resultado no terminal:
 ```
 cargo run --release -- -m \
     -p 8080 \
-    -d postgres://postgres:postgres@localhost/postgres \
-    -w resources/webservices.ini
+    -d postgres://postgres:postgres@172.17.0.1/postgres
 🔧 Configured for production.
     => address: 0.0.0.0
     => port: 8080
@@ -67,9 +65,11 @@ cargo run --release -- -m \
     => limits: forms = 512KiB
     => keep-alive: 16s
     => tls: disabled
-    => [extra] databases: { db::conn = { url = "postgres://postgres:postgres@localhost/postgres" } }
+    => [extra] databases: { db::conn = { url = "postgres://postgres:postgres@172.17.0.1/postgres" } }
 🚀 Rocket has launched from http://0.0.0.0:8080
 ```
+
+Use `^C` (Ctrl+C) no terminal caso deseje encerrar o servidor.
 
 Para mais informações, use o menu de ajuda da aplicação: `cargo run --release -- -h`.
 
@@ -78,46 +78,48 @@ Para mais informações, use o menu de ajuda da aplicação: `cargo run --releas
 Antes de prosseguir com os passos seguintes, verifique se o servidor está online. Para isto, basta consultar sua versão, por exemplo:
 
 ```bash
-curl -w '\n' http://localhost:8080/fiscalidade/v1/version
+curl -s \
+    http://localhost:8080/fiscalidade/v1/version | jsonpp
 ```
 
 ele deve retornar um JSON com a versão do servidor, exemplo:
 
 ```
 {
-    "status": "ok",
-    "result": {
-        "major": 1,
-        "minor": 0,
-        "patch": 0
-    }
+  "status": "ok",
+  "result": {
+    "major": 0,
+    "minor": 6,
+    "patch": 2
+  }
 }
 ```
 
 feito isso, agora podemos definir um administrador para gerenciamento do servidor:
 
 ```bash
-curl -w '\n' -X POST http://localhost:8080/fiscalidade/v1/taxpayers/manager
+curl -s \
+    -X POST http://localhost:8080/fiscalidade/v1/taxpayers/manager | jsonpp
 ```
 
 administrador criado:
 
 ```
 {
-    "status": "ok",
-    "result": {
-        "id": 1,
-        "name": "admin",
-        "business_name": "Administrador",
-        "registry": "",
-        "email": "",
-        "certificate": "",
-        "certificate_password": "",
-        "token": "qoNrF2mZsSUpZCEXUw2Mxx",
-        "manager": true,
-        "active": true,
-        "created_at": "2020-02-21T18:50:58.795898"
-    }
+  "status": "ok",
+  "result": {
+    "id": 1,
+    "name": "admin",
+    "business_name": "Administrador",
+    "registry": "",
+    "email": "",
+    "certificate": "",
+    "certificate_password": "",
+    "token": "qoNrF2mZsSUpZCEXUw2Mxx",
+    "manager": true,
+    "active": true,
+    "created_at": "2020-02-24T15:44:37.210486"
+  }
 }
 ```
 
@@ -128,81 +130,81 @@ Observe o token gerado: `qoNrF2mZsSUpZCEXUw2Mxx`. **Guarde ele em um local segur
 Considerando que o certificado do contribuinte encontra-se em `~/Downloads/certificado.pfx`:
 
 ```bash
-curl -w '\n' \
-    -H "Content-Type: application/json" \
+curl -s \
     -X POST \
+    -H "Content-Type: application/json" \
     -d '{"name":"Fulano","business_name":"Fulano de tal","registry":"123456789","email":"fulano@gmail","certificate":"'$(base64 -w 0 $HOME/Downloads/certificado.pfx)'","certificate_password":"12345678"}' \
-    http://localhost:8080/fiscalidade/v1/taxpayers
+    http://localhost:8080/fiscalidade/v1/taxpayers | jsonpp
 ```
 
 o servidor deve retornar o seguinte JSON:
 
 ```
 {
-    "status": "ok",
-    "result": {
-        "id": 2,
-        "name": "Fulano",
-        "business_name": "Fulano de tal",
-        "registry": "123456789",
-        "email": "fulano@gmail",
-        "certificate": "MIIkEAIB...<demais caracteres>=",
-        "certificate_password": "12345678",
-        "token": "U8pNjWuAdj2PB3AGnai7mT",
-        "manager": false,
-        "active": true,
-        "created_at": "2020-02-21T19:04:22.374504"
-    }
+  "status": "ok",
+  "result": {
+    "id": 2,
+    "name": "Fulano",
+    "business_name": "Fulano de tal",
+    "registry": "123456789",
+    "email": "fulano@gmail",
+    "certificate": "MIIkEAIB...<demais caracteres>=",
+    "certificate_password": "12345678",
+    "token": "U8pNjWuAdj2PB3AGnai7mT",
+    "manager": false,
+    "active": true,
+    "created_at": "2020-02-24T15:47:03.824520"
+  }
 }
 ```
 
 agora, com o contribuinte cadastrado, podemos fazer uma solicitação de uso de serviço. Para consultar a lista de serviços disponíveis, use:
 
 ```bash
-curl -w '\n' \
-    http://localhost:8080/fiscalidade/v1/services
+curl -s \
+    http://localhost:8080/fiscalidade/v1/services | jsonpp
 ```
 
 serviços listados:
 
 ```
 {
-    "status": "ok",
-    "result": [
-        {
-            "id": 1,
-            "description": "NF-e",
-            "slug": "nfe",
-            "active": true,
-            "created_at": "2020-02-21T18:50:38.268453"
-        }
-    ]
+  "status": "ok",
+  "result": [
+    {
+      "id": 1,
+      "description": "NF-e",
+      "slug": "nfe",
+      "active": true,
+      "created_at": "2020-02-24T15:44:31.537942"
+    }
+  ]
 }
 ```
 
 por fim, solicitamos o uso do serviço NF-e para contribuinte cadastrado:
 
 ```bash
-curl -w '\n' \
+curl -s \
+    -X POST \
     -H 'X-Auth-Token: U8pNjWuAdj2PB3AGnai7mT' \
     -H "Content-Type: application/json" \
-    -X POST \
     -d '{"taxpayer_id":2,"service_id":1}' \
-    http://localhost:8080/fiscalidade/v1/taxpayers/services
+    http://localhost:8080/fiscalidade/v1/taxpayers/services | jsonpp
 ```
 
 solicitação criada:
 
 ```
 {
-    "status": "ok",
-    "result": {
-        "id": 1,
-        "taxpayer_id": 2,
-        "service_id": 1,
-        "allowed_at": null,
-        "created_at": "2020-02-21T19:08:58.390814"
-    }
+  "status": "ok",
+  "result": {
+    "id": 1,
+    "taxpayer_id": 2,
+    "service_id": 1,
+    "allowed_at": null,
+    "created_at": "2020-02-24T15:49:36.359227"
+  }
 }
 ```
 
@@ -213,70 +215,70 @@ A listagem de serviços solicitados pode ser acessada por qualquer usuário admi
 Listando serviços solicitados:
 
 ```bash
-curl -w '\n' \
+curl -s \
     -H 'X-Auth-Token: qoNrF2mZsSUpZCEXUw2Mxx' \
     -H "Content-Type: application/json" \
-    http://localhost:8080/fiscalidade/v1/taxpayers/services/unauthorized
+    http://localhost:8080/fiscalidade/v1/taxpayers/services/unauthorized | jsonpp
 ```
 
 solicitações listadas:
 
 ```
 {
-    "status": "ok",
-    "result": [
-        {
-            "id": 1,
-            "taxpayer_id": 2,
-            "taxpayer_name": "Fulano",
-            "service_id": 1,
-            "service_description": "NF-e",
-            "allowed_at": null,
-            "created_at": "2020-02-21T21:35:46.571708"
-        }
-    ]
+  "status": "ok",
+  "result": [
+    {
+      "id": 1,
+      "taxpayer_id": 2,
+      "taxpayer_name": "Fulano",
+      "service_id": 1,
+      "service_description": "NF-e",
+      "allowed_at": null,
+      "created_at": "2020-02-24T15:49:36.359227"
+    }
+  ]
 }
 ```
 
 por fim, basta autorizar uso de serviço "NF-e" para contribuinte "Fulano":
 
 ```bash
-curl -w '\n' \
+curl -s \
+    -X POST \
     -H 'X-Auth-Token: qoNrF2mZsSUpZCEXUw2Mxx' \
     -H "Content-Type: application/json" \
-    -X POST \
-    http://localhost:8080/fiscalidade/v1/taxpayers/services/authorize/1
+    http://localhost:8080/fiscalidade/v1/taxpayers/services/authorize/1 | jsonpp
 ```
 
 autorização criada:
 
 ```
 {
-    "status": "ok",
-    "result": {
-        "id": 1,
-        "taxpayer_id": 2,
-        "service_id": 1,
-        "allowed_at": "2020-02-21T22:52:17.272386",
-        "created_at": "2020-02-21T21:37:46.255217"
-    }
+  "status": "ok",
+  "result": {
+    "id": 1,
+    "taxpayer_id": 2,
+    "service_id": 1,
+    "allowed_at": "2020-02-24T15:50:59.319443",
+    "created_at": "2020-02-24T15:49:36.359227"
+  }
 }
 ```
 
 e finalmente o contribuinte tem permissão para acessar o serviço:
 
 ```bash
-curl -w '\n' \
+curl -s \
     -H 'X-Auth-Token: U8pNjWuAdj2PB3AGnai7mT' \
-    http://localhost:8080/fiscalidade/v1/nfe/status-servico/mt/p
+    http://localhost:8080/fiscalidade/v1/nfe/status-servico/mt/p | jsonpp
 ```
 
 resultado:
 
 ```
 {
-    "status": "ok",
-    "result": "<?xml version='1.0' encoding='utf-8'?><soapenv:Envelope xmlns:soapenv=\"http://www.w3.org/2003/05/soap-envelope\"><soapenv:Body><nfeResultMsg xmlns=\"http://www.portalfiscal.inf.br/nfe/wsdl/NFeStatusServico4\"><retConsStatServ xmlns=\"http://www.portalfiscal.inf.br/nfe\" versao=\"4.00\"><tpAmb>1</tpAmb><verAplic>MT_A2RL-4.00</verAplic><cStat>107</cStat><xMotivo>Servico em Operacao</xMotivo><cUF>51</cUF><dhRecbto>2020-02-21T19:29:35-04:00</dhRecbto><tMed>2</tMed></retConsStatServ></nfeResultMsg></soapenv:Body></soapenv:Envelope>"
+  "status": "ok",
+  "result": "<?xml version='1.0' encoding='utf-8'?><soapenv:Envelope xmlns:soapenv=\"http://www.w3.org/2003/05/soap-envelope\"><soapenv:Body><nfeResultMsg xmlns=\"http://www.portalfiscal.inf.br/nfe/wsdl/NFeStatusServico4\"><retConsStatServ xmlns=\"http://www.portalfiscal.inf.br/nfe\" versao=\"4.00\"><tpAmb>1</tpAmb><verAplic>MT_A2RL-4.00</verAplic><cStat>109</cStat><xMotivo>Servico Paralisado sem Previsao</xMotivo><cUF>51</cUF></retConsStatServ></nfeResultMsg></soapenv:Body></soapenv:Envelope>"
 }
 ```
 
@@ -285,41 +287,41 @@ resultado:
 Se por alguma razão for necessário remover autorização de uso de serviço para contribuinte, use:
 
 ```bash
-curl -w '\n' \
+curl -s \
+    -X PUT \
     -H 'X-Auth-Token: qoNrF2mZsSUpZCEXUw2Mxx' \
     -H "Content-Type: application/json" \
-    -X PUT \
-    http://localhost:8080/fiscalidade/v1/taxpayers/services/unauthorize/1
+    http://localhost:8080/fiscalidade/v1/taxpayers/services/unauthorize/1 | jsonpp
 ```
 
 resultado:
 
 ```
 {
-    "status": "ok",
-    "result": {
-        "id": 1,
-        "taxpayer_id": 2,
-        "service_id": 1,
-        "allowed_at": null,
-        "created_at": "2020-02-21T21:48:56.980432"
-    }
+  "status": "ok",
+  "result": {
+    "id": 1,
+    "taxpayer_id": 2,
+    "service_id": 1,
+    "allowed_at": null,
+    "created_at": "2020-02-24T15:49:36.359227"
+  }
 }
 ```
 
 e ao tentar acessar o serviço novamente:
 
 ```bash
-curl -w '\n' \
+curl -s \
     -H 'X-Auth-Token: U8pNjWuAdj2PB3AGnai7mT' \
-    http://localhost:8080/fiscalidade/v1/nfe/status-servico/mt/p
+    http://localhost:8080/fiscalidade/v1/nfe/status-servico/mt/p | jsonpp
 ```
 
 o acesso é negado:
 
 ```
 {
-    "status": "error",
-    "reason": "Unauthorized"
+  "status": "error",
+  "reason": "Unauthorized"
 }
 ```
