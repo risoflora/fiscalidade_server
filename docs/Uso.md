@@ -1,6 +1,6 @@
 # Passo a passo para usar o `fiscalidade_server`
 
-Os passos a seguir preparam um ambiente para rodar o `fiscalidade_server` no Windows ou Linux. Serão necessárias as seguintes ferramentas:
+Os passos a seguir preparam um ambiente para rodar o `fiscalidade_server` no Linux e serão necessárias as seguintes ferramentas:
 
 - [PostgreSQL](https://www.postgresql.org)
 - [Docker](https://www.docker.com) (opcional)
@@ -132,7 +132,7 @@ Considerando que o certificado do contribuinte encontra-se em `~/Downloads/certi
 ```bash
 curl -s \
     -X POST \
-    -H "Content-Type: application/json" \
+    -H 'Content-Type: application/json' \
     -d '{"name":"Fulano","business_name":"Fulano de tal","registry":"123456789","email":"fulano@gmail","certificate":"'$(base64 -w 0 $HOME/Downloads/certificado.pfx)'","certificate_password":"12345678"}' \
     http://localhost:8080/fiscalidade/v1/taxpayers | jsonpp
 ```
@@ -188,7 +188,7 @@ por fim, solicitamos o uso do serviço NF-e para contribuinte cadastrado:
 curl -s \
     -X POST \
     -H 'X-Auth-Token: U8pNjWuAdj2PB3AGnai7mT' \
-    -H "Content-Type: application/json" \
+    -H 'Content-Type: application/json' \
     -d '{"taxpayer_id":2,"service_id":1}' \
     http://localhost:8080/fiscalidade/v1/taxpayers/services | jsonpp
 ```
@@ -245,7 +245,7 @@ por fim, basta autorizar uso de serviço "NF-e" para contribuinte "Fulano":
 curl -s \
     -X POST \
     -H 'X-Auth-Token: qoNrF2mZsSUpZCEXUw2Mxx' \
-    -H "Content-Type: application/json" \
+    -H 'Content-Type: application/json' \
     http://localhost:8080/fiscalidade/v1/taxpayers/services/authorize/1 | jsonpp
 ```
 
@@ -289,7 +289,7 @@ Se por alguma razão for necessário remover autorização de uso de serviço pa
 curl -s \
     -X PUT \
     -H 'X-Auth-Token: qoNrF2mZsSUpZCEXUw2Mxx' \
-    -H "Content-Type: application/json" \
+    -H 'Content-Type: application/json' \
     http://localhost:8080/fiscalidade/v1/taxpayers/services/unauthorize/1 | jsonpp
 ```
 
