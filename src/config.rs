@@ -1,4 +1,8 @@
-use std::path::Path;
+use std::{
+    fs::{self, File},
+    io::{self, Write},
+    path::Path,
+};
 
 use crate::anyhow;
 use dirs;
@@ -16,15 +20,26 @@ pub struct Config {
 }
 
 impl Config {
+    fn prepare() -> io::Result<()> {
+        fs::create_dir_all(Self::dir())?;
+        let filename = Self::filename();
+        if !Path::new(&filename).exists() {
+            let mut file = File::create(&filename)?;
+            file.write_all(
+                b"port=8080\ndatabase=postgres://postgres:postgres@localhost/postgres\nwebservices=\nmigrations=true\nsilent=true\n",
+            )?;
+        }
+        Ok(())
+    }
+
     pub fn dir() -> String {
         format!(
-            "{}/{}",
+            "{}/fiscalidade",
             dirs::config_dir()
                 .unwrap_or_default()
                 .into_os_string()
                 .into_string()
-                .unwrap_or_default(),
-            env!("CARGO_PKG_NAME")
+                .unwrap_or_default()
         )
     }
 
@@ -33,6 +48,7 @@ impl Config {
     }
 
     pub fn from_file<P: AsRef<Path>>(path: P) -> anyhow::Result<Config> {
+        Self::prepare()?;
         dotenv::from_filename(path)?;
         Ok(Config {
             port: dotenv::var("port")?.parse::<u16>()?,

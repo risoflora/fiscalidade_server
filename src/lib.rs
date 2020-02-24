@@ -105,11 +105,10 @@ embed_migrations!();
 
 pub fn rocket() -> anyhow::Result<rocket::Rocket> {
     let args = Args::new();
-    println!("{}", Config::filename());
     let opts: AppProps = if args.len() > 1 {
         Options::from_args(args)?.into()
     } else {
-        Config::from_file("config/fiscalidade_server.conf")?.into()
+        Config::from_file(Config::filename())?.into()
     };
     let database = opts.database;
     if opts.migrations {
