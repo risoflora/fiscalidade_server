@@ -1,7 +1,3 @@
-:::::::::::::::::::::::::::::::::::::::::::::::::
-:: Copyright (c) 2020 Silvio Clecio (silvioprog)
-:::::::::::::::::::::::::::::::::::::::::::::::::
-
 :: Download the PostgreSQL zip file for Windows from:
 :: https://www.enterprisedb.com/download-postgresql-binaries
 
