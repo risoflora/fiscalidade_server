@@ -1,9 +1,9 @@
 #define MyAppName ReadIni(AddBackslash(SourcePath) + "..\Cargo.toml", "package", "name")
 #define MyAppVersion ReadIni(AddBackslash(SourcePath) + "..\Cargo.toml", "package", "version")
+#define MyAppURL ReadIni(AddBackslash(SourcePath) + "..\Cargo.toml", "package", "repository")
 #define MyAppDesc "Fiscalidade Server"
 #define MyAppArch "x64"
 #define MyAppPublisher "Risoflora"
-#define MyAppURL "https://github.com/risoflora/fiscalidade_server"
 
 [Setup]
 AppId={{B2B339F1-5EE4-4A4A-A90E-F56EB3EDA1E4}
