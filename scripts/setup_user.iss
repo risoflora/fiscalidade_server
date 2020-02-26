@@ -9,7 +9,7 @@
 AppId={{B2B339F1-5EE4-4A4A-A90E-F56EB3EDA1E4}
 AppName={#MyAppDesc}
 AppVersion={#MyAppVersion}
-AppVerName={#MyAppDesc} {#MyAppVersion}
+AppVerName={#MyAppDesc} {#MyAppVersion} (User)
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
@@ -51,3 +51,6 @@ BeveledLabel= {#MyAppDesc} - {#MyAppURL}
 
 [Run]
 Filename: "{app}\{#MyAppName}.exe"; Description: "{cm:LaunchProgram,{#StringChange(MyAppDesc, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
+
+[UninstallRun]
+Filename: {sys}\taskkill.exe; Parameters: "/f /im {#MyAppName}.exe"; Flags: skipifdoesntexist runhidden
