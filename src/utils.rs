@@ -1,6 +1,7 @@
 use std::{env, fmt};
 
 use nanoid;
+use serde::Serialize;
 
 macro_rules! mount_path {
     () => {

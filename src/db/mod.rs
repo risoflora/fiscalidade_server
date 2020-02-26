@@ -1,4 +1,5 @@
 use diesel::PgConnection;
+use rocket_contrib::database;
 use thiserror::Error;
 
 pub mod cache;

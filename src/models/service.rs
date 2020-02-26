@@ -1,4 +1,5 @@
 use chrono::NaiveDateTime;
+use serde::Serialize;
 
 #[derive(Serialize, Queryable)]
 pub struct QueryableService {

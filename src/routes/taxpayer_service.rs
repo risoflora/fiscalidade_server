@@ -1,3 +1,4 @@
+use rocket::{get, post, put};
 use rocket_contrib::json::{Json, JsonValue};
 
 use super::{

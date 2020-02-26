@@ -1,3 +1,4 @@
+use rocket::get;
 use rocket_contrib::json::JsonValue;
 
 use super::ApiError;

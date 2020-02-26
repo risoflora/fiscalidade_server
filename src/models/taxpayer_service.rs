@@ -1,4 +1,5 @@
 use chrono::NaiveDateTime;
+use serde::{Deserialize, Serialize};
 
 use crate::db::schema::fiscalidade_taxpayers_services_view as taxpayers_services_view;
 use crate::models::taxpayer::QueryableTaxpayer;

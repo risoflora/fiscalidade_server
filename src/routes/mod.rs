@@ -2,6 +2,7 @@ use std::string::FromUtf8Error;
 
 use fiscalidade::{DfeError, Pkcs12CertificateError};
 use rocket::{
+    get,
     http::Status,
     request::Request,
     response::{self, status, Responder},

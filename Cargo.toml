@@ -1,7 +1,7 @@
 [package]
 name = "fiscalidade_server"
 description = "Servidor REST para envio e consulta de XMLs de Documentos Fiscais da SEFAZ."
-version = "0.6.4"
+version = "0.6.5"
 authors = ["Silvio Clécio <silvioprog@gmail.com>"]
 repository = "https://github.com/risoflora/fiscalidade_server"
 edition = "2018"
@@ -19,7 +19,7 @@ rocket_contrib = { version = "^0.4", default-features = false, features = ["json
 diesel = { version = "^1", default-features = false, features = ["chrono", "postgres"] }
 diesel_migrations = { version = "^1", default-features = false, features = ["postgres"] }
 serde_json = { version = "^1", features = ["preserve_order"] }
-serde = "^1"
+serde = { version = "^1", features = ["derive"] }
 serde_derive = "^1"
 fiscalidade = "^0.4"
 anyhow = "^1"

@@ -1,4 +1,5 @@
 use chrono::NaiveDateTime;
+use serde::Serialize;
 
 use crate::schema::fiscalidade_caches as caches;
 

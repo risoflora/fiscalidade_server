@@ -4,19 +4,17 @@
 extern crate diesel;
 #[macro_use]
 extern crate diesel_migrations;
-#[macro_use]
-extern crate rocket;
-#[macro_use]
-extern crate rocket_contrib;
-#[macro_use]
-extern crate serde_derive;
 
 use std::{collections::HashMap, io::stdout};
 
 use anyhow::anyhow;
 use diesel::{Connection, PgConnection};
 use fiscalidade::WebServices;
-use rocket::config::{Config as RocketConfig, Environment, Limits, LoggingLevel, Value};
+use rocket::{
+    catch, catchers,
+    config::{Config as RocketConfig, Environment, Limits, LoggingLevel, Value},
+    routes,
+};
 use rocket_contrib::json::JsonValue;
 
 #[macro_use]

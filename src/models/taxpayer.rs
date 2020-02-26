@@ -1,4 +1,5 @@
 use chrono::NaiveDateTime;
+use serde::{Deserialize, Serialize};
 
 use crate::schema::fiscalidade_taxpayers as taxpayers;
 
