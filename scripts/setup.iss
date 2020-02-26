@@ -44,6 +44,10 @@ Source: "..\LICENSE-MIT"; DestDir: "{app}"; DestName: "LICENSE-MIT.txt"; Flags: 
 Name: "{group}\LICENSE-MIT"; Filename: "{app}\LICENSE-MIT.txt"
 Name: "{group}\LICENSE-APACHE"; Filename: "{app}\LICENSE-APACHE.txt"
 Name: "{group}\{cm:UninstallProgram,{#MyAppDesc}}"; Filename: "{uninstallexe}"
+Name: "{userstartup}\{#MyAppDesc}"; Filename: "{app}\{#MyAppName}.exe"; WorkingDir: "{app}"
 
 [Messages]
 BeveledLabel= {#MyAppDesc} - {#MyAppURL}
+
+[Run]
+Filename: "{app}\{#MyAppName}.exe"; Description: "{cm:LaunchProgram,{#StringChange(MyAppDesc, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
