@@ -99,6 +99,8 @@ impl From<Config> for AppProps {
             #[cfg(not(feature = "embed_webservices"))]
             webservices: opts.webservices,
             migrations: opts.migrations,
+            install: false,
+            uninstall: false,
             silent: opts.silent,
         }
     }
