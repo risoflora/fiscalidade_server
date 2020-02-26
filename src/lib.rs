@@ -11,17 +11,6 @@ extern crate rocket_contrib;
 #[macro_use]
 extern crate serde_derive;
 
-extern crate anyhow;
-extern crate chrono;
-extern crate dirs;
-extern crate dotenv;
-extern crate fiscalidade;
-extern crate getopts;
-extern crate nanoid;
-extern crate serde;
-extern crate serde_json;
-extern crate thiserror;
-
 use std::{collections::HashMap, io::stdout};
 
 use anyhow::anyhow;

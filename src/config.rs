@@ -5,7 +5,6 @@ use std::{
     path::Path,
 };
 
-use crate::anyhow;
 use dirs;
 use dotenv;
 

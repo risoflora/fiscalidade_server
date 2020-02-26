@@ -1,9 +1,10 @@
 [package]
 name = "fiscalidade_server"
 description = "Servidor REST para envio e consulta de XMLs de Documentos Fiscais da SEFAZ."
-version = "0.6.3"
+version = "0.6.4"
 authors = ["Silvio Clécio <silvioprog@gmail.com>"]
 repository = "https://github.com/risoflora/fiscalidade_server"
+edition = "2018"
 
 [profile.release]
 lto = true

@@ -10,7 +10,7 @@ use crate::AppData;
 
 fn dfe_request(
     auth: ServiceAuth,
-    data: State<AppData>,
+    data: State<'_, AppData>,
     uf: &str,
     ambiente: &str,
 ) -> Result<(Uf, Ambiente, Dfe), ApiError> {
@@ -56,7 +56,7 @@ pub type ServiceResult = Result<JsonValue, ApiError>;
 #[get("/status-servico/<uf>/<ambiente>")]
 pub fn status_servico(
     auth: ServiceAuth,
-    data: State<AppData>,
+    data: State<'_, AppData>,
     uf: String,
     ambiente: String,
 ) -> ServiceResult {
@@ -68,7 +68,7 @@ pub fn status_servico(
 pub fn consultar_cadastro(
     conn: Conn,
     auth: ServiceAuth,
-    data: State<AppData>,
+    data: State<'_, AppData>,
     uf: String,
     ambiente: String,
     tipo_documento: String,
@@ -95,7 +95,7 @@ pub fn consultar_cadastro(
 pub fn consultar_xml(
     conn: Conn,
     auth: ServiceAuth,
-    data: State<AppData>,
+    data: State<'_, AppData>,
     uf: String,
     ambiente: String,
     chave: String,

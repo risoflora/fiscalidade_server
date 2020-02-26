@@ -35,7 +35,7 @@ pub enum ApiError {
 }
 
 impl<'r> Responder<'r> for ApiError {
-    fn respond_to(self, req: &Request) -> response::Result<'r> {
+    fn respond_to(self, req: &Request<'_>) -> response::Result<'r> {
         status::Custom(Status::UnprocessableEntity, json_error!(self.to_string())).respond_to(req)
     }
 }

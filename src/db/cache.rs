@@ -4,7 +4,7 @@ use crate::db::Error;
 use crate::models::cache::{InsertableCache, QueryableCache};
 use crate::schema::fiscalidade_caches as caches;
 
-pub fn set(conn: &PgConnection, cache: &InsertableCache) -> Result<QueryableCache, Error> {
+pub fn set(conn: &PgConnection, cache: &InsertableCache<'_>) -> Result<QueryableCache, Error> {
     Ok(diesel::insert_into(caches::table)
         .values(cache)
         .on_conflict(caches::key)
