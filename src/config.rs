@@ -31,18 +31,24 @@ impl Config {
     }
 
     pub fn dir() -> String {
-        format!(
-            "{}/fiscalidade",
-            dirs::config_dir()
+        Path::new(
+            &dirs::config_dir()
                 .unwrap_or_default()
                 .into_os_string()
                 .into_string()
-                .unwrap_or_default()
+                .unwrap_or_default(),
         )
+        .join("fiscalidade")
+        .display()
+        .to_string()
     }
 
     pub fn filename() -> String {
-        format!("{}/{}.conf", Self::dir(), env!("CARGO_PKG_NAME"))
+        Path::new(&Self::dir())
+            .join(env!("CARGO_PKG_NAME"))
+            .with_extension("conf")
+            .display()
+            .to_string()
     }
 
     pub fn from_file<P: AsRef<Path>>(path: P) -> anyhow::Result<Config> {
