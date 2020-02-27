@@ -5,11 +5,12 @@ extern crate diesel;
 #[macro_use]
 extern crate diesel_migrations;
 
-use std::{collections::HashMap, fs::File, io::stdout, path::Path};
+use std::{collections::HashMap, env, fs::File, path::Path};
 
 use anyhow::anyhow;
 use diesel::{Connection, PgConnection};
 use fiscalidade::WebServices;
+use log::error;
 use rocket::{
     catch, catchers,
     config::{Config as RocketConfig, Environment, Limits, LoggingLevel, Value},
@@ -104,9 +105,11 @@ pub fn rocket() -> anyhow::Result<rocket::Rocket> {
     };
     if !opts.silent {
         WriteLogger::init(
-            LevelFilter::Info,
+            LevelFilter::Warn,
             LogConfig::default(),
-            File::create(Path::new(&Info::new().name).with_extension("log"))?,
+            File::create(
+                Path::new(&env::current_exe()?.display().to_string()).with_extension("log"),
+            )?,
         )?;
     }
     if opts.install {
@@ -116,11 +119,16 @@ pub fn rocket() -> anyhow::Result<rocket::Rocket> {
     }
     let database = opts.database;
     if opts.migrations {
-        let conn = PgConnection::establish(&database)?;
-        if opts.silent {
-            embedded_migrations::run(&conn)?;
-        } else {
-            embedded_migrations::run_with_output(&conn, &mut stdout())?;
+        let conn = match PgConnection::establish(&database) {
+            Ok(conn) => conn,
+            Err(error) => {
+                error!("{}", error);
+                return Err(error.into());
+            }
+        };
+        if let Err(error) = embedded_migrations::run(&conn) {
+            error!("{}", error);
+            return Err(error.into());
         }
     }
     let mut database_config = HashMap::new();
