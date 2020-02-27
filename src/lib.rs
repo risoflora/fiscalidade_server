@@ -5,7 +5,7 @@ extern crate diesel;
 #[macro_use]
 extern crate diesel_migrations;
 
-use std::{collections::HashMap, fs::File, io::stdout};
+use std::{collections::HashMap, fs::File, io::stdout, path::Path};
 
 use anyhow::anyhow;
 use diesel::{Connection, PgConnection};
@@ -16,7 +16,7 @@ use rocket::{
     routes,
 };
 use rocket_contrib::json::JsonValue;
-use simplelog::{CombinedLogger, Config as LogConfig, LevelFilter, SimpleLogger, WriteLogger};
+use simplelog::{Config as LogConfig, LevelFilter, WriteLogger};
 
 #[macro_use]
 mod utils;
@@ -35,6 +35,7 @@ use crate::config::Config;
 use crate::db::Conn;
 use crate::options::Options;
 use crate::routes::{cache, nfe, services, taxpayer, taxpayer_service};
+use crate::utils::Info;
 
 #[derive(Clone)]
 pub struct AppData {
@@ -95,24 +96,19 @@ fn service_unavailable() -> JsonValue {
 embed_migrations!();
 
 pub fn rocket() -> anyhow::Result<rocket::Rocket> {
-    CombinedLogger::init(vec![
-        #[cfg(feature = "term")]
-        TermLogger::new(LevelFilter::Warn, LogConfig::default(), TerminalMode::Mixed).unwrap(),
-        #[cfg(not(feature = "term"))]
-        SimpleLogger::new(LevelFilter::Warn, LogConfig::default()),
-        WriteLogger::new(
-            LevelFilter::Info,
-            LogConfig::default(),
-            File::create("errors.log").unwrap(),
-        ),
-    ])
-    .unwrap();
     let args = Args::new();
     let opts: AppProps = if args.len() > 1 {
         Options::from_args(args)?.into()
     } else {
         Config::from_file(Config::filename())?.into()
     };
+    if !opts.silent {
+        WriteLogger::init(
+            LevelFilter::Info,
+            LogConfig::default(),
+            File::create(Path::new(&Info::new().name).with_extension("log"))?,
+        )?;
+    }
     if opts.install {
         daemon::install()
     } else if opts.uninstall {
