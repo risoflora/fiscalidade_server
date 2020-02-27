@@ -26,7 +26,7 @@ SolidCompression=yes
 WizardStyle=modern
 OutputDir=..\target\release
 InternalCompressLevel=ultra64
-SetupIconFile=..\resources\ico\fiscalidade_server.ico
+SetupIconFile=..\resources\ico\{#MyAppName}.ico
 UninstallDisplayIcon={app}\{#MyAppName}.ico
 
 [Languages]
@@ -41,7 +41,7 @@ Source: "..\target\release\libpq.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\target\release\libssl-1_1-x64.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\LICENSE-APACHE"; DestDir: "{app}"; DestName: "LICENSE-APACHE.txt"; Flags: ignoreversion
 Source: "..\LICENSE-MIT"; DestDir: "{app}"; DestName: "LICENSE-MIT.txt"; Flags: ignoreversion
-Source: "..\resources\ico\fiscalidade_server.ico"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\resources\ico\{#MyAppName}.ico"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
 Name: "{group}\LICENSE-MIT"; Filename: "{app}\LICENSE-MIT.txt"
