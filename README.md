@@ -22,7 +22,6 @@ Opções:
                         Banco de dados
     -w, --webservices resources/webservices.ini
                         Arquivo de webservices
-    -m, --migrations    Cria ou atualiza o DB
     -s, --silent        Desativa informações de log
 ```
 

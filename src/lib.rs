@@ -36,7 +36,6 @@ use crate::config::Config;
 use crate::db::Conn;
 use crate::options::Options;
 use crate::routes::{cache, nfe, services, taxpayer, taxpayer_service};
-use crate::utils::Info;
 
 #[derive(Clone)]
 pub struct AppData {
@@ -48,7 +47,6 @@ pub struct AppProps {
     pub database: String,
     #[cfg(not(feature = "embed_webservices"))]
     pub webservices: String,
-    pub migrations: bool,
     pub install: bool,
     pub uninstall: bool,
     pub silent: bool,
@@ -118,18 +116,16 @@ pub fn rocket() -> anyhow::Result<rocket::Rocket> {
         daemon::uninstall()
     }
     let database = opts.database;
-    if opts.migrations {
-        let conn = match PgConnection::establish(&database) {
-            Ok(conn) => conn,
-            Err(error) => {
-                error!("{}", error);
-                return Err(error.into());
-            }
-        };
-        if let Err(error) = embedded_migrations::run(&conn) {
+    let conn = match PgConnection::establish(&database) {
+        Ok(conn) => conn,
+        Err(error) => {
             error!("{}", error);
             return Err(error.into());
         }
+    };
+    if let Err(error) = embedded_migrations::run(&conn) {
+        error!("{}", error);
+        return Err(error.into());
     }
     let mut database_config = HashMap::new();
     let mut databases = HashMap::new();

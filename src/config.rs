@@ -15,7 +15,6 @@ pub struct Config {
     pub database: String,
     #[cfg(not(feature = "embed_webservices"))]
     pub webservices: String,
-    pub migrations: bool,
     pub silent: bool,
 }
 
@@ -59,7 +58,6 @@ impl Config {
             database: dotenv::var("database")?,
             #[cfg(not(feature = "embed_webservices"))]
             webservices: dotenv::var("webservices")?,
-            migrations: dotenv::var("migrations")?.parse::<bool>()?,
             silent: dotenv::var("silent")?.parse::<bool>()?,
         })
     }
@@ -72,7 +70,6 @@ impl Default for Config {
             database: String::from("postgres://postgres:postgres@localhost/postgres"),
             #[cfg(not(feature = "embed_webservices"))]
             webservices: Default::default(),
-            migrations: true,
             silent: true,
         }
     }
@@ -83,16 +80,16 @@ impl fmt::Display for Config {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(
             f,
-            "port={}\ndatabase={}\nmigrations={}\nsilent={}",
-            self.port, self.database, self.migrations, self.silent,
+            "port={}\ndatabase={}\nsilent={}",
+            self.port, self.database, self.silent,
         )
     }
     #[cfg(not(feature = "embed_webservices"))]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(
             f,
-            "port={}\ndatabase={}\nwebservices={}\nmigrations={}\nsilent={}",
-            self.port, self.database, self.webservices, self.migrations, self.silent,
+            "port={}\ndatabase={}\nwebservices={}\nsilent={}",
+            self.port, self.database, self.webservices, self.silent,
         )
     }
 }
@@ -104,7 +101,6 @@ impl From<Config> for AppProps {
             database: opts.database,
             #[cfg(not(feature = "embed_webservices"))]
             webservices: opts.webservices,
-            migrations: opts.migrations,
             install: false,
             uninstall: false,
             silent: opts.silent,
