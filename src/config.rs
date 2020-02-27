@@ -1,11 +1,5 @@
-use std::{
-    fmt,
-    fs::{self, File},
-    io::{self, Write},
-    path::Path,
-};
+use std::{fmt, fs::File, io::Write, path::Path};
 
-use dirs;
 use dotenv;
 
 use super::AppProps;
@@ -19,40 +13,12 @@ pub struct Config {
 }
 
 impl Config {
-    fn prepare() -> io::Result<()> {
-        fs::create_dir_all(Self::dir())?;
-        let filename = Self::filename();
-        if !Path::new(&filename).exists() {
-            let mut file = File::create(&filename)?;
+    pub fn from_file<P: AsRef<Path>>(path: P) -> anyhow::Result<Config> {
+        if !Path::new(&path.as_ref()).exists() {
+            let mut file = File::create(&path)?;
             file.write_all(Self::default().to_string().as_bytes())?;
         }
-        Ok(())
-    }
-
-    pub fn dir() -> String {
-        Path::new(
-            &dirs::config_dir()
-                .unwrap_or_default()
-                .into_os_string()
-                .into_string()
-                .unwrap_or_default(),
-        )
-        .join("fiscalidade")
-        .display()
-        .to_string()
-    }
-
-    pub fn filename() -> String {
-        Path::new(&Self::dir())
-            .join(env!("CARGO_PKG_NAME"))
-            .with_extension("conf")
-            .display()
-            .to_string()
-    }
-
-    pub fn from_file<P: AsRef<Path>>(path: P) -> anyhow::Result<Config> {
-        Self::prepare()?;
-        dotenv::from_filename(path)?;
+        dotenv::from_filename(&path)?;
         Ok(Config {
             port: dotenv::var("port")?.parse::<u16>()?,
             database: dotenv::var("database")?,

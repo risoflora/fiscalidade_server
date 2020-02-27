@@ -5,7 +5,7 @@ extern crate diesel;
 #[macro_use]
 extern crate diesel_migrations;
 
-use std::{collections::HashMap, env, fs::File, path::Path};
+use std::{collections::HashMap, fs::File};
 
 use anyhow::anyhow;
 use diesel::{Connection, PgConnection};
@@ -13,7 +13,7 @@ use fiscalidade::WebServices;
 use log::error;
 use rocket::{
     catch, catchers,
-    config::{Config as RocketConfig, Environment, Limits, LoggingLevel, Value},
+    config::{Config as RocketConfig, Environment, Limits, Value},
     routes,
 };
 use rocket_contrib::json::JsonValue;
@@ -99,15 +99,13 @@ pub fn rocket() -> anyhow::Result<rocket::Rocket> {
     let opts: AppProps = if args.len() > 1 {
         Options::from_args(args)?.into()
     } else {
-        Config::from_file(Config::filename())?.into()
+        Config::from_file(&utils::basename("conf"))?.into()
     };
     if !opts.silent {
         WriteLogger::init(
             LevelFilter::Warn,
             LogConfig::default(),
-            File::create(
-                Path::new(&env::current_exe()?.display().to_string()).with_extension("log"),
-            )?,
+            File::create(&utils::basename("log"))?,
         )?;
     }
     if opts.install {
@@ -146,11 +144,6 @@ pub fn rocket() -> anyhow::Result<rocket::Rocket> {
         .limits(limits)
         .keep_alive(16)
         .secret_key("dcvE9tKmPfmHIGkh8b2AUalwaNYnObZUyDWYjbiPQeo=")
-        .log_level(if opts.silent {
-            LoggingLevel::Off
-        } else {
-            LoggingLevel::Critical
-        })
         .finalize()?;
     Ok(rocket::custom(config)
         .mount(

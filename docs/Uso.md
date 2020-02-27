@@ -39,7 +39,7 @@ Agora basta acessar o pgAdmin em `http://localhost` para verificar se tudo ocorr
 Uma vez com o PostgreSQL instalado, basta executar o Fiscalidade Server e ele se encarregará de criar as tabelas no banco de dados automaticamente. O comando mínimo para executá-lo é:
 
 ```bash
-cargo run --release -- -m \
+cargo run --release -- \
     -p 8080 \
     -d postgres://postgres:postgres@172.17.0.1/postgres
 ```
@@ -47,29 +47,7 @@ cargo run --release -- -m \
 Explicando os parâmetros do comando acima:
 
 - `-p 8080` - Porta do servidor. Onde a API será disponibilizada, ex: `http://localhost:8080/fiscalidade/v1/taxpayers/services`.
-- `-d postgres://postgres:postgres@localhost/postgres` - Caminho (path) para o banco de dados. Neste caso, usando o DB padrão, `postgres`.
-- `-m` - Executa scripts para criação (ou atualização) do banco de dados.
-
-Se tudo ocorrer bem, será exibido o seguinte resultado no terminal:
-
-```
-cargo run --release -- -m \
-    -p 8080 \
-    -d postgres://postgres:postgres@172.17.0.1/postgres
-🔧 Configured for production.
-    => address: 0.0.0.0
-    => port: 8080
-    => log: critical
-    => workers: 16
-    => secret key: provided
-    => limits: forms = 512KiB
-    => keep-alive: 16s
-    => tls: disabled
-    => [extra] databases: { db::conn = { url = "postgres://postgres:postgres@172.17.0.1/postgres" } }
-🚀 Rocket has launched from http://0.0.0.0:8080
-```
-
-Use `^C` (Ctrl+C) no terminal caso deseje encerrar o servidor.
+- `-d postgres://postgres:postgres@172.17.0.1/postgres` - Caminho (path) para o banco de dados. Neste caso, usando o DB padrão disponível no Docker, `postgres`.
 
 Para mais informações, use o menu de ajuda da aplicação: `cargo run --release -- -h`.
 

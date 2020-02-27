@@ -1,4 +1,4 @@
-use std::{env, fmt};
+use std::{env, fmt, path::Path};
 
 use nanoid;
 use serde::Serialize;
@@ -79,6 +79,14 @@ impl fmt::Display for Info {
             self.name, self.version, self.arch, self.os
         )
     }
+}
+
+#[inline]
+pub fn basename(suffix: &str) -> String {
+    Path::new(&env::current_exe().unwrap_or_default())
+        .with_extension(suffix)
+        .display()
+        .to_string()
 }
 
 #[inline]
