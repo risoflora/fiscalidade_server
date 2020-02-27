@@ -70,7 +70,7 @@ impl Default for Config {
             database: String::from("postgres://postgres:postgres@localhost/postgres"),
             #[cfg(not(feature = "embed_webservices"))]
             webservices: Default::default(),
-            silent: true,
+            silent: false,
         }
     }
 }
