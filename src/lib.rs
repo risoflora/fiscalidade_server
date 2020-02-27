@@ -5,7 +5,7 @@ extern crate diesel;
 #[macro_use]
 extern crate diesel_migrations;
 
-use std::{collections::HashMap, io::stdout};
+use std::{collections::HashMap, fs::File, io::stdout};
 
 use anyhow::anyhow;
 use diesel::{Connection, PgConnection};
@@ -16,6 +16,7 @@ use rocket::{
     routes,
 };
 use rocket_contrib::json::JsonValue;
+use simplelog::{CombinedLogger, Config as LogConfig, LevelFilter, SimpleLogger, WriteLogger};
 
 #[macro_use]
 mod utils;
@@ -94,6 +95,18 @@ fn service_unavailable() -> JsonValue {
 embed_migrations!();
 
 pub fn rocket() -> anyhow::Result<rocket::Rocket> {
+    CombinedLogger::init(vec![
+        #[cfg(feature = "term")]
+        TermLogger::new(LevelFilter::Warn, LogConfig::default(), TerminalMode::Mixed).unwrap(),
+        #[cfg(not(feature = "term"))]
+        SimpleLogger::new(LevelFilter::Warn, LogConfig::default()),
+        WriteLogger::new(
+            LevelFilter::Info,
+            LogConfig::default(),
+            File::create("errors.log").unwrap(),
+        ),
+    ])
+    .unwrap();
     let args = Args::new();
     let opts: AppProps = if args.len() > 1 {
         Options::from_args(args)?.into()
