@@ -8,7 +8,7 @@ pub mod service;
 pub mod taxpayer;
 pub mod taxpayer_service;
 
-#[database("db::conn")]
+#[database("postgres_pool")]
 pub struct Conn(PgConnection);
 
 #[derive(Error, Debug)]

@@ -120,7 +120,7 @@ pub fn rocket() -> anyhow::Result<rocket::Rocket> {
     let mut database_config = HashMap::new();
     let mut databases = HashMap::new();
     database_config.insert("url", Value::from(database));
-    databases.insert("db::conn", Value::from(database_config));
+    databases.insert("postgres_pool", Value::from(database_config));
     #[cfg(feature = "embed_webservices")]
     let webservices = WebServices::from_embedded();
     #[cfg(not(feature = "embed_webservices"))]
