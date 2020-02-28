@@ -7,5 +7,5 @@ mod service;
 mod service;
 
 fn main() -> anyhow::Result<()> {
-    Ok(service::run()?)
+    service::run()
 }

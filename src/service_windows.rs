@@ -27,7 +27,7 @@ pub enum WinServiceError {
 
 pub type WinServicResult = result::Result<(), WinServiceError>;
 
-pub fn run() -> WinServicResult {
+pub fn run() -> anyhow::Result<()> {
     Ok(service_dispatcher::start(SERVICE_NAME, ffi_service_main)?)
 }
 
@@ -56,7 +56,7 @@ pub fn run_service() -> WinServicResult {
         checkpoint: 0,
         wait_hint: Duration::default(),
     })?;
-    fiscalidade_server::rocket()?.launch();
+    fiscalidade_server::run()?;
     status_handle.set_service_status(ServiceStatus {
         service_type: SERVICE_TYPE,
         current_state: ServiceState::Stopped,

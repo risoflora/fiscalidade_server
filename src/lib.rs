@@ -179,3 +179,8 @@ pub fn rocket() -> anyhow::Result<rocket::Rocket> {
             service_unavailable
         ]))
 }
+
+pub fn run() -> anyhow::Result<()> {
+    self::rocket()?.launch();
+    Ok(())
+}
