@@ -1,6 +1,11 @@
-use fiscalidade_server;
+#[cfg(any(target_os = "linux"))]
+#[path = "daemon_linux.rs"]
+mod service;
+
+#[cfg(target_os = "windows")]
+#[path = "service_windows.rs"]
+mod service;
 
 fn main() -> anyhow::Result<()> {
-    fiscalidade_server::rocket()?.launch();
-    Ok(())
+    Ok(service::run()?)
 }
