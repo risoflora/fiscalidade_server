@@ -24,7 +24,6 @@ mod utils;
 
 mod args;
 mod config;
-mod daemon;
 mod db;
 mod models;
 mod options;
@@ -47,8 +46,6 @@ pub struct AppProps {
     pub database: String,
     #[cfg(not(feature = "embed_webservices"))]
     pub webservices: String,
-    pub install: bool,
-    pub uninstall: bool,
     pub silent: bool,
 }
 
@@ -107,11 +104,6 @@ pub fn rocket() -> anyhow::Result<rocket::Rocket> {
             LogConfig::default(),
             File::create(&utils::basename("log"))?,
         )?;
-    }
-    if opts.install {
-        daemon::install()
-    } else if opts.uninstall {
-        daemon::uninstall()
     }
     let database = opts.database;
     let conn = match PgConnection::establish(&database) {

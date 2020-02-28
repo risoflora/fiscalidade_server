@@ -36,8 +36,6 @@ pub struct Options {
     pub database: String,
     #[cfg(not(feature = "embed_webservices"))]
     pub webservices: String,
-    pub install: bool,
-    pub uninstall: bool,
     pub silent: bool,
 }
 
@@ -60,8 +58,6 @@ impl Options {
             "Arquivo de webservices",
             "resources/webservices.ini",
         );
-        opts.optflag("i", "install", "Instala aplicação como serviço");
-        opts.optflag("u", "uninstall", "Desinstala serviço da aplicação");
         opts.optflag("s", "silent", "Desativa informações de log");
         if args.len() <= 1 {
             print_help(args.program(), &opts);
@@ -81,8 +77,6 @@ impl Options {
             database: args.opt_get("d")?.unwrap(),
             #[cfg(not(feature = "embed_webservices"))]
             webservices: args.opt_get("w")?.unwrap(),
-            install: args.opt_present("i"),
-            uninstall: args.opt_present("u"),
             silent: args.opt_present("s"),
         })
     }
@@ -95,8 +89,6 @@ impl From<Options> for AppProps {
             database: opts.database,
             #[cfg(not(feature = "embed_webservices"))]
             webservices: opts.webservices,
-            install: opts.install,
-            uninstall: opts.uninstall,
             silent: opts.silent,
         }
     }

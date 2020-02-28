@@ -8,7 +8,7 @@ A aplicação é compatível com Windows e Linux oferecendo um menu como a segui
 
 ```
 $ cargo run --quiet --release -- --help
-Fiscalidade Server v0.1.0 (linux-x86_64)
+Fiscalidade Server v0.6.7 (linux-x86_64)
 
 Copyright (c) Silvio Clécio <silvioprog@gmail.com>
 
@@ -20,8 +20,6 @@ Opções:
     -p, --port 8000     Porta do servidor
     -d, --database postgres://postgres:postgres@localhost/postgres
                         Banco de dados
-    -w, --webservices resources/webservices.ini
-                        Arquivo de webservices
     -s, --silent        Desativa informações de log
 ```
 
