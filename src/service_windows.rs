@@ -1,5 +1,6 @@
 use std::{ffi::OsString, result, time::Duration};
 
+use log::error;
 use thiserror::Error;
 use windows_service::{
     define_windows_service,
@@ -13,7 +14,7 @@ use windows_service::{
 
 use fiscalidade_server;
 
-const SERVICE_NAME: &str = "fiscalidade_server";
+const SERVICE_NAME: &str = env!("CARGO_PKG_NAME");
 const SERVICE_TYPE: ServiceType = ServiceType::OWN_PROCESS;
 
 #[derive(Error, Debug)]
@@ -33,7 +34,9 @@ pub fn run() -> WinServicResult {
 define_windows_service!(ffi_service_main, my_service_main);
 
 pub fn my_service_main(_arguments: Vec<OsString>) {
-    if let Err(_) = run_service() {}
+    if let Err(error) = run_service() {
+        error!("{}", error);
+    }
 }
 
 pub fn run_service() -> WinServicResult {
