@@ -2,25 +2,25 @@
 #define MyAppVersion ReadIni(AddBackslash(SourcePath) + "..\Cargo.toml", "package", "version")
 #define MyAppURL ReadIni(AddBackslash(SourcePath) + "..\Cargo.toml", "package", "repository")
 #define MyAppDesc "Fiscalidade Server"
+#define MyAppLongDesc "Servidor stand-alone com cache e APIs REST para envio e consulta de XMLs de Documentos Fiscais da SEFAZ."
 #define MyAppArch "x64"
 #define MyAppPublisher "Risoflora"
 
 [Setup]
-AppId={{B2B339F1-5EE4-4A4A-A90E-F56EB3EDA1E4}
+AppId={{8F7E9D0F-32B8-4B78-80B7-453F448CBCB2}
 AppName={#MyAppDesc}
 AppVersion={#MyAppVersion}
-AppVerName={#MyAppDesc} {#MyAppVersion} (User)
+AppVerName={#MyAppDesc} {#MyAppVersion}
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
 DefaultGroupName={#MyAppDesc}
-DefaultDirName={autopf}\{#MyAppDesc}
+DefaultDirName={pf}\{#MyAppDesc}
 LicenseFile=..\LICENSE-MIT
 ArchitecturesAllowed=x64
 ArchitecturesInstallIn64BitMode=x64
-PrivilegesRequired=lowest
-OutputBaseFilename={#StringChange(MyAppDesc, ' ', '')}UserSetup-{#MyAppArch}-{#MyAppVersion}
+OutputBaseFilename={#StringChange(MyAppDesc, ' ', '')}Setup-{#MyAppArch}-{#MyAppVersion}
 Compression=lzma/ultra64
 SolidCompression=yes
 WizardStyle=modern
@@ -47,13 +47,16 @@ Source: "..\resources\ico\{#MyAppName}.ico"; DestDir: "{app}"; Flags: ignorevers
 Name: "{group}\LICENSE-MIT"; Filename: "{app}\LICENSE-MIT.txt"
 Name: "{group}\LICENSE-APACHE"; Filename: "{app}\LICENSE-APACHE.txt"
 Name: "{group}\{cm:UninstallProgram,{#MyAppDesc}}"; Filename: "{uninstallexe}"
-Name: "{userstartup}\{#MyAppDesc}"; Filename: "{app}\{#MyAppName}.exe"; WorkingDir: "{app}"
-
-[Messages]
-BeveledLabel= {#MyAppDesc} - {#MyAppURL}
 
 [Run]
-Filename: "{app}\{#MyAppName}.exe"; Description: "{cm:LaunchProgram,{#StringChange(MyAppDesc, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
+Filename: {sys}\sc.exe; Parameters: "create {#MyAppName} start= auto binPath= ""{app}\{#MyAppName}.exe"" DisplayName= ""{#MyAppDesc}"""; Flags: runhidden
+Filename: {sys}\sc.exe; Parameters: "description {#MyAppName} ""{#MyAppLongDesc}"""; Flags: runhidden
+Filename: {sys}\sc.exe; Parameters: "start {#MyAppName}"; Flags: runhidden
 
 [UninstallRun]
 Filename: {sys}\taskkill.exe; Parameters: "/f /im {#MyAppName}.exe"; Flags: skipifdoesntexist runhidden
+;Filename: {sys}\sc.exe; Parameters: "stop {#MyAppName}"; Flags: runhidden
+Filename: {sys}\sc.exe; Parameters: "delete {#MyAppName}"; Flags: runhidden
+
+[Messages]
+BeveledLabel= {#MyAppDesc} - {#MyAppURL}
