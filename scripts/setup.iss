@@ -94,10 +94,7 @@ begin
   if LoadStringsFromFile(AFileName, VContent) then
     for I := Low(VContent) to High(VContent) do
       if NameValueOf(VContent[I], VName, Result) and SameText(VName, AName) then
-      begin
-        Result := Copy(Result, Length(sDatabasePrefix) + 1, MaxInt);
         Exit;
-      end;
   Result := ADefValue;
 end;
 
@@ -109,20 +106,20 @@ end;
 procedure CreateConfigFile;
 begin
   SaveStringToFile(ConfigFileName,
-    'port=8080' + sLineBreak +
-    'database=' + sDatabasePrefix + DatabasePage.Values[0] + sLineBreak +
+    'port=' + DatabasePage.Values[0] + sLineBreak +
+    'database=' + sDatabasePrefix + DatabasePage.Values[1] + sLineBreak +
     'silent=true', True);
 end;
 
 procedure InitializeWizard;
 begin
   DatabasePage := CreateInputQueryPage(wpLicense,
-    'Configurar banco de dados PostgreSQL',
-    'É necessário informar uma URL de banco de dados PostgreSQL para prosseguir com a instalação',
-    'A URL é composta de: <usuário>:<senha>@<servidor>[:porta]/<banco>');
+    'Configurar porta do servidor e banco de dados PostgreSQL', '', '');
+  DatabasePage.Add('&Porta do servidor:', False);
   DatabasePage.Add('&URL da base de dados:', False);
-  DatabasePage.Values[0] := FileValue(ConfigFileName, 'database',
-    ExpandConstant('postgres:postgres@localhost/postgres'));
+  DatabasePage.Values[0] := FileValue(ConfigFileName, 'port', '8080');
+  DatabasePage.Values[1] := Copy(FileValue(ConfigFileName, 'database', sDatabasePrefix + 
+    'postgres:postgres@localhost/postgres'), Length(sDatabasePrefix) + 1, MaxInt);
 end;
 
 function NextButtonClick(ACurPageID: Integer): Boolean;
@@ -131,6 +128,12 @@ begin
   if Result then
     Exit;
   Result := DatabasePage.Values[0] <> '';
+  if not Result then
+  begin
+    MsgBox('Você precisa informar a porta do servidor', mbError, MB_OK);
+    Exit;
+  end;
+  Result := DatabasePage.Values[1] <> '';
   if not Result then
     MsgBox('Você precisa informar a URL do banco de dados', mbError, MB_OK);
 end;
