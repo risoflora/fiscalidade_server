@@ -118,8 +118,8 @@ procedure InitializeWizard;
 begin
   DatabasePage := CreateInputQueryPage(wpLicense,
     'Configurar banco de dados PostgreSQL',
-    'Ã‰ necessÃ¡rio informar uma URL de banco de dados PostgreSQL para prosseguir com a instalaÃ§Ã£o',
-    'A URL Ã© composta de: <usuÃ¡rio>:<senha>@<servidor>[:porta]/<banco>');
+    'É necessário informar uma URL de banco de dados PostgreSQL para prosseguir com a instalação',
+    'A URL é composta de: <usuário>:<senha>@<servidor>[:porta]/<banco>');
   DatabasePage.Add('&URL da base de dados:', False);
   DatabasePage.Values[0] := FileValue(ConfigFileName, 'database',
     ExpandConstant('postgres:postgres@localhost/postgres'));
@@ -132,5 +132,5 @@ begin
     Exit;
   Result := DatabasePage.Values[0] <> '';
   if not Result then
-    MsgBox('VocÃª precisa informar a URL do banco de dados', mbError, MB_OK);
+    MsgBox('Você precisa informar a URL do banco de dados', mbError, MB_OK);
 end;
