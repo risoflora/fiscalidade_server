@@ -5,7 +5,7 @@ extern crate diesel;
 #[macro_use]
 extern crate diesel_migrations;
 
-use std::{collections::HashMap, fs::File};
+use std::{collections::HashMap, fs::File, process};
 
 use anyhow::anyhow;
 use diesel::{Connection, PgConnection};
@@ -110,12 +110,12 @@ pub fn rocket() -> anyhow::Result<rocket::Rocket> {
         Ok(conn) => conn,
         Err(error) => {
             error!("{}", error);
-            return Err(error.into());
+            process::exit(1);
         }
     };
     if let Err(error) = embedded_migrations::run(&conn) {
         error!("{}", error);
-        return Err(error.into());
+        process::exit(1);
     }
     let mut database_config = HashMap::new();
     let mut databases = HashMap::new();
