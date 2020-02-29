@@ -1,4 +1,10 @@
-use std::{ffi::OsString, result, time::Duration};
+use std::{
+    ffi::OsString,
+    result,
+    sync::{Arc, Condvar, Mutex},
+    thread,
+    time::Duration,
+};
 
 use log::error;
 use thiserror::Error;
@@ -12,7 +18,7 @@ use windows_service::{
     service_dispatcher,
 };
 
-use fiscalidade_server;
+use fiscalidade_server as server;
 
 const SERVICE_NAME: &str = env!("CARGO_PKG_NAME");
 const SERVICE_TYPE: ServiceType = ServiceType::OWN_PROCESS;
@@ -24,8 +30,6 @@ pub enum WinServiceError {
     #[error(transparent)]
     Other(#[from] anyhow::Error),
 }
-
-pub type WinServicResult = result::Result<(), WinServiceError>;
 
 pub fn run() -> anyhow::Result<()> {
     Ok(service_dispatcher::start(SERVICE_NAME, ffi_service_main)?)
@@ -39,11 +43,19 @@ pub fn my_service_main(_arguments: Vec<OsString>) {
     }
 }
 
-pub fn run_service() -> WinServicResult {
+pub fn run_service() -> result::Result<(), WinServiceError> {
+    let pair = Arc::new((Mutex::new(false), Condvar::new()));
+    let pair2 = pair.clone();
     let event_handler = move |control_event| -> ServiceControlHandlerResult {
         match control_event {
             ServiceControl::Interrogate => ServiceControlHandlerResult::NoError,
-            ServiceControl::Stop => ServiceControlHandlerResult::NoError,
+            ServiceControl::Stop => {
+                let (lock, cvar) = &*pair2;
+                let mut terminated = lock.lock().unwrap();
+                *terminated = true;
+                cvar.notify_one();
+                ServiceControlHandlerResult::NoError
+            }
             _ => ServiceControlHandlerResult::NotImplemented,
         }
     };
@@ -56,7 +68,16 @@ pub fn run_service() -> WinServicResult {
         checkpoint: 0,
         wait_hint: Duration::default(),
     })?;
-    fiscalidade_server::run()?;
+    thread::spawn(|| {
+        if let Err(error) = server::run() {
+            error!("{}", error);
+        }
+    });
+    let (lock, cvar) = &*pair;
+    let mut terminated = lock.lock().unwrap();
+    while !*terminated {
+        terminated = cvar.wait(terminated).unwrap();
+    }
     status_handle.set_service_status(ServiceStatus {
         service_type: SERVICE_TYPE,
         current_state: ServiceState::Stopped,
