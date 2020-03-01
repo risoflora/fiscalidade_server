@@ -50,7 +50,7 @@ Categories=Application;
 X-AppImage-Name=$APP_DESC
 X-AppImage-Arch=x86_64" >"$app_bindir/$app_name.desktop"
 
-rm $app_bindir/$app_image
+rm -f $app_bindir/$app_image
 
 VERSION= OUTPUT=$app_image $linuxdeploy \
     --executable $app_bindir/$app_name \
@@ -62,8 +62,8 @@ VERSION= OUTPUT=$app_image $linuxdeploy \
 
 mv $app_image $app_bindir/
 
-rm $app_bindir/$app_name.desktop
-rm -r $app_bindir/AppDir
+rm -f $app_bindir/$app_name.desktop
+rm -rf $app_bindir/AppDir
 
 echo ""
 echo "-- Created file: $app_bindir/$app_image"
