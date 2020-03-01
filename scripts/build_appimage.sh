@@ -9,6 +9,11 @@ if [ $(basename $(pwd)) != "scripts" ]; then
     exit 1
 fi
 
+if [ $(uname -m) != "x86_64"]; then
+    echo "Invalid architecture"
+    exit 2
+fi
+
 extract_toml_value() {
     sed '/^ *'$1'/!d;s/.*= *//;s/^"\(.*\)".*/\1/' ../Cargo.toml
 }
@@ -16,8 +21,7 @@ extract_toml_value() {
 app_version=$(extract_toml_value version)
 app_name=$(extract_toml_value name)
 app_icons=$(ls -d ../resources/png/*)
-app_arch=$(uname -m)
-app_image=$(echo "$APP_DESC-$app_version-$app_arch.AppImage" | tr -d ' ')
+app_image=$(echo "$APP_DESC-$app_version-x86_64.AppImage" | tr -d ' ')
 app_bindir="../target/release"
 linuxdeploy=$HOME/Downloads/linuxdeploy-x86_64.AppImage
 
@@ -44,7 +48,7 @@ Terminal=true
 StartupNotify=true
 Categories=Application;
 X-AppImage-Name=$APP_DESC
-X-AppImage-Arch=$app_arch" >"$app_bindir/$app_name.desktop"
+X-AppImage-Arch=x86_64" >"$app_bindir/$app_name.desktop"
 
 VERSION= OUTPUT=$app_image $linuxdeploy \
     --executable $app_bindir/$app_name \
