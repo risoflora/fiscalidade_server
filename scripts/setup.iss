@@ -56,7 +56,7 @@ Filename: {sys}\sc.exe; Parameters: "start {#MyAppName}"; Flags: runhidden
 
 [UninstallRun]
 Filename: {sys}\taskkill.exe; Parameters: "/f /im {#MyAppName}.exe"; Flags: skipifdoesntexist runhidden
-;Filename: {sys}\sc.exe; Parameters: "stop {#MyAppName}"; Flags: runhidden
+Filename: {sys}\sc.exe; Parameters: "stop {#MyAppName}"; Flags: runhidden
 Filename: {sys}\sc.exe; Parameters: "delete {#MyAppName}"; Flags: runhidden
 
 [Messages]
@@ -130,10 +130,10 @@ begin
   Result := DatabasePage.Values[0] <> '';
   if not Result then
   begin
-    MsgBox('Você precisa informar a porta do servidor', mbError, MB_OK);
+    MsgBox('Vocï¿½ precisa informar a porta do servidor', mbError, MB_OK);
     Exit;
   end;
   Result := DatabasePage.Values[1] <> '';
   if not Result then
-    MsgBox('Você precisa informar a URL do banco de dados', mbError, MB_OK);
+    MsgBox('Vocï¿½ precisa informar a URL do banco de dados', mbError, MB_OK);
 end;
