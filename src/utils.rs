@@ -1,5 +1,8 @@
 use std::{env, fmt, path::Path};
 
+#[cfg(any(target_os = "linux"))]
+use dirs;
+
 use nanoid;
 use serde::Serialize;
 
@@ -82,11 +85,14 @@ impl fmt::Display for Info {
 }
 
 #[inline]
-pub fn basename(suffix: &str) -> String {
-    Path::new(&env::current_exe().unwrap_or_default())
-        .with_extension(suffix)
-        .display()
-        .to_string()
+pub fn basename(ext: &str) -> String {
+    #[cfg(target_os = "windows")]
+    let path = env::current_exe().unwrap_or_default();
+    #[cfg(any(target_os = "linux"))]
+    let path = dirs::home_dir()
+        .unwrap_or_default()
+        .join(format!(".{}", Info::new().name));
+    Path::new(&path).with_extension(ext).display().to_string()
 }
 
 #[inline]

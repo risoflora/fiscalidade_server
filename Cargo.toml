@@ -1,7 +1,7 @@
 [package]
 name = "fiscalidade_server"
 description = "Servidor REST para envio e consulta de XMLs de Documentos Fiscais da SEFAZ."
-version = "0.7.4"
+version = "0.7.5"
 authors = ["Silvio Clécio <silvioprog@gmail.com>"]
 repository = "https://github.com/risoflora/fiscalidade_server"
 build = "build.rs"
@@ -33,7 +33,11 @@ chrono = { version = "^0.4", features = ["serde"] }
 nanoid = { git = "https://github.com/nikolay-govorov/nanoid" }
 base64 = "^0.11"
 
-[target.'cfg(windows)'.dependencies]
+
+[target.'cfg(any(target_os = "linux"))'.dependencies]
+dirs = "^2"
+
+[target.'cfg(target_os="windows")'.dependencies]
 windows-service = "^0.2"
 
 [target.'cfg(target_os="windows")'.build-dependencies]
