@@ -1,85 +1,29 @@
 # Instalando `fiscalidade_server`
 
-Os passos a seguir instalam o daemon do `fiscalidade_server` no sistema em modo usuário, ou seja, não requer root.
+Os passos a seguir instalam o Fiscalidade Server em modo de serviço no Windows e um daemon de usuário no Linux a partir de um [AppImage](https://en.wikipedia.org/wiki/AppImage).
 
 ## Windows 10 ou superior
 
-TODO
+Para instalar o Fiscalidade Server no Windows, acesse a [área de downloads](https://github.com/risoflora/fiscalidade_server/releases) do projeto e obtenha o setup de instalação da versão mais recente (por exemplo: `FiscalidadeServerSetup-x64-1.0.0.exe`). Feito isto, basta executá-lo como administrador e seguir as informações presentes nas telas do instalador.
 
-Para desinstalar:
+Caso deseje desinstala-lo, acesse o **Painel de control** do sistema e remova-o na área **Programas > Programas e Recursos**.
 
-TODO
+## Linux (Debian, Ubuntu, Fedora, openSUSE etc.)
 
-## Linux (Debian, Ubuntu, Mint etc.)
-
-Instalar a `libpq` em distribuições Debian, Ubuntu ou derivados:
+Para instalar o Fiscalidade Server no Linux, acesse a [área de downloads](https://github.com/risoflora/fiscalidade_server/releases) do projeto e obtenha o [AppImage](https://en.wikipedia.org/wiki/AppImage) da versão mais recente (por exemplo: `FiscalidadeServer-1.0.0-x86_64.AppImage`). Feito isto, execute o seguinte comando:
 
 ```bash
-sudo apt install libpq5
+# TODO: criar script
 ```
 
-Instalando `fiscalidade_server` como daemon sem usuário root:
+Observe: o comando acima **não requer** usuário root.
+
+Caso deseje desinstala-lo, execute:
 
 ```bash
-# baixar ou compilar o executável `fiscalidade_server`
-cd ~
-mkdir -p $HOME/.fiscalidade/bin
-mv Downloads/fiscalidade_server $HOME/.fiscalidade/bin/
-echo 'export PATH="$HOME/.fiscalidade/bin:$PATH"' >> .profile
-source .profile
-mv fiscalidade_server.service ~/.config/systemd/user/
-systemctl --user add-wants default.target fiscalidade_server
-systemctl --user start fiscalidade_server
+# TODO: criar script
 ```
 
-Checando se o daemon está ativo:
+## Usando
 
-```bash
-systemctl --user status fiscalidade_server.service
-```
-
-Para desinstalar:
-
-```bash
-systemctl --user stop fiscalidade_server
-systemctl --user disable fiscalidade_server
-rm ~/.config/systemd/user/fiscalidade_server.service
-```
-
-## Linux (RHEL, Fedora and CentOS etc.)
-
-Instalar a `libpq` em distribuições RHEL, Fedora and CentOS ou derivados:
-
-```bash
-sudo dnf install libpq
-```
-
-Instalando `fiscalidade_server` como daemon sem usuário root:
-
-```bash
-# baixar ou compilar o executável `fiscalidade_server`
-cd ~
-mkdir -p $HOME/.fiscalidade/bin
-mv Downloads/fiscalidade_server $HOME/.fiscalidade/bin/
-echo 'export PATH="$HOME/.fiscalidade/bin:$PATH"' >> .profile
-source .profile
-mv fiscalidade_server.service ~/.config/systemd/user/
-systemctl --user add-wants default.target fiscalidade_server
-systemctl --user start fiscalidade_server
-```
-
-Checando se o daemon está ativo:
-
-```bash
-systemctl --user status fiscalidade_server.service
-```
-
-Para desinstalar:
-
-Para desinstalar:
-
-```bash
-systemctl --user stop fiscalidade_server
-systemctl --user disable fiscalidade_server
-rm ~/.config/systemd/user/fiscalidade_server.service
-```
+Após a instalação com sucesso, siga os passos de uso disponíveis em [docs/Uso.md](Uso.md).

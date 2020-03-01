@@ -74,7 +74,7 @@ Siga as instruções iniciais de uso em [docs/Uso.md](docs/Uso.md). Para instru�
 
 ## Wishlist
 
-- [ ] criar AppImage (prioridade alta)
+- [x] criar AppImage (prioridade alta)
 - [ ] embutir arquivo de serviço no executável (prioridade alta)
 - [x] embutir arquivo de webservice no executável
 - [x] configuração via arquivo
