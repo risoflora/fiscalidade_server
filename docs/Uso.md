@@ -1,42 +1,15 @@
-# Passo a passo para usar o `fiscalidade_server`
+# Passo a passo para usar o Fiscalidade Server
 
-Os passos a seguir preparam um ambiente para rodar o `fiscalidade_server` no Linux e serão necessárias as seguintes ferramentas:
+Os passos a seguir explicam usar o Fiscalidade Server a partir de serviço ou compilando o executável com o [Cargo](https://doc.rust-lang.org/cargo).
 
-- [PostgreSQL](https://www.postgresql.org)
-- [Docker](https://www.docker.com) (opcional)
-- [jsonpp](https://crates.io/crates/jsonpp) (opcional)
-- Executável do Fiscalidade Server
+As seguintes ferramentas serão utilizadas:
 
-## Instalando o PostgreSQL
+- [cURL](https://curl.haxx.se)
+- [jsonpp](https://crates.io/crates/jsonpp)
 
-O primeiro passo necessário para rodar `fiscalidade_server` é instalar o servidor banco de dados. Para instala-lo, basta usar o [setup oficial distribuído no site do fabricante](https://www.postgresql.org/download) e seguir os passos do arquivo de leia-me deles.
+## Compilando e executando o Fiscalidade Server
 
-É possível também usar o PostgreSQL a partir de uma imagem Docker. Por exemplo:
-
-```bash
-docker run --name postgres -d \
-    -p 5432:5432 \
-    -e POSTGRES_PASSWORD=postgres \
-    -v $HOME/docker/volumes/postgres:/var/lib/postgresql/data \
-    --restart unless-stopped postgres
-```
-
-O comando acima instala uma versão mínima (suficiente) do PostgreSQL subindo-o na porta padrão, `5432`. Alternativamente, também é possível instalar a versão web do pgAdmin4 via Docker:
-
-```bash
-docker run --name pgadmin4 -d \
-    -p 80:80 \
-    -e 'PGADMIN_DEFAULT_EMAIL=postgres' \
-    -e 'PGADMIN_DEFAULT_PASSWORD=postgres' \
-    -v /private/var/lib/pgadmin:$HOME/docker/pgadmin \
-    --restart unless-stopped dpage/pgadmin4
-```
-
-Agora basta acessar o pgAdmin em `http://localhost` para verificar se tudo ocorreu bem.
-
-## Executando o `fiscalidade_server`
-
-Uma vez com o PostgreSQL instalado, basta executar o Fiscalidade Server e ele se encarregará de criar as tabelas no banco de dados automaticamente. O comando mínimo para executá-lo é:
+**IMPORTANTE:** Certifique-se do PostgreSQL estar instalado! Em seguida, compile e execute o Fiscalidade Server que ele se encarregará de criar as tabelas no banco de dados automaticamente. O comando mínimo para compilá-lo e executá-lo é:
 
 ```bash
 cargo run --release -- \
@@ -51,9 +24,13 @@ Explicando os parâmetros do comando acima:
 
 Para mais informações, use o menu de ajuda da aplicação: `cargo run --release -- -h`.
 
+## Executando o Fiscalidade Server via serviço/daemon
+
+Todas as instruções para executar o Fiscalidade Server como serviço no Windows ou daemon no Linux estão disponíveis em [docs/Instalação.md](Instalação.md).
+
 ## Definindo administrador padrão do servidor
 
-Antes de prosseguir com os passos seguintes, verifique se o servidor está online. Para isto, basta consultar sua versão, por exemplo:
+Antes de prosseguir com os próximos passos, verifique se o servidor está online. Para isto, basta consultar sua versão com o seguinte comando:
 
 ```bash
 curl -s \
