@@ -20,7 +20,7 @@ Caso deseje desinstala-lo, acesse o **Painel de control** do sistema e remova-o 
 
 **Instalando:**
 
-Para instalar o Fiscalidade Server no Linux, acesse a [área de downloads](https://github.com/risoflora/fiscalidade_server/releases) do projeto e obtenha o [AppImage](https://en.wikipedia.org/wiki/AppImage) da versão mais recente (por exemplo: `FiscalidadeServer-1.0.0-x86_64.AppImage`). Feito isto, execute o seguinte comando:
+Para instalar o Fiscalidade Server no Linux execute o seguinte comando:
 
 ```bash
 sh <(curl -s -L https://raw.githubusercontent.com/risoflora/fiscalidade_server/master/scripts/setup.sh)
