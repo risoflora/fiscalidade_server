@@ -32,7 +32,7 @@ ou:
 bash <(curl -s -L https://raw.githubusercontent.com/risoflora/fiscalidade_server/master/scripts/setup.sh)
 ```
 
-Escolha a opção `1. Install daemon` e aguarde até completar a instalação. Observe: este comando **não requer** usuário root.
+Escolha a opção `1. Install daemon`, confirme com Enter e aguarde até completar a instalação. Observe: este comando **não requer** usuário root.
 
 **Configurando:**
 
@@ -52,7 +52,7 @@ ou:
 bash <(curl -s -L https://raw.githubusercontent.com/risoflora/fiscalidade_server/master/scripts/setup.sh)
 ```
 
-Escolha a opção `2. Uninstall daemon` e aguarde a desinstalação.
+Escolha a opção `2. Uninstall daemon`, confirme com Enter e aguarde a desinstalação.
 
 ## Usando
 

@@ -11,7 +11,13 @@ ddir=$HOME/.config/systemd/user
 exe=$dir/$NAME
 svc=$ddir/$NAME.service
 
+setup_question() {
+    read -p "Do you want to $1 $DESCRIPTION? [Y/n] " ans
+    [ "$ans" = Y -o "$ans" = y -o -z "$ans" ]
+}
+
 install() {
+    setup_question "install"
     echo "Installing, please wait ..."
     mkdir -p $dir $ddir
     curl -sSLf $APPIMAGE_URL -o $exe
@@ -32,6 +38,7 @@ install() {
 }
 
 uninstall() {
+    setup_question "uninstall"
     systemctl --user stop $NAME
     systemctl --quiet --user disable $NAME
     rm -f $svc $exe
@@ -40,6 +47,7 @@ uninstall() {
 
 status() {
     systemctl --user status $NAME
+    read
 }
 
 while true; do
