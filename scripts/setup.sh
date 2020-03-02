@@ -40,7 +40,6 @@ uninstall() {
 
 status() {
     systemctl --user status $NAME
-    read
 }
 
 while true; do

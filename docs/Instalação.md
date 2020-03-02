@@ -23,10 +23,16 @@ Caso deseje desinstala-lo, acesse o **Painel de control** do sistema e remova-o 
 Para instalar o Fiscalidade Server no Linux, acesse a [área de downloads](https://github.com/risoflora/fiscalidade_server/releases) do projeto e obtenha o [AppImage](https://en.wikipedia.org/wiki/AppImage) da versão mais recente (por exemplo: `FiscalidadeServer-1.0.0-x86_64.AppImage`). Feito isto, execute o seguinte comando:
 
 ```bash
-curl -sSf https://raw.githubusercontent.com/risoflora/fiscalidade_server/master/scripts/setup.sh | sh
+sh <(curl -s -L https://raw.githubusercontent.com/risoflora/fiscalidade_server/master/scripts/setup.sh)
 ```
 
-Escolha a opção "`1. Install daemon`" e aguarde até completar a instalação. Observe: este comando **não requer** usuário root.
+ou:
+
+```bash
+bash <(curl -s -L https://raw.githubusercontent.com/risoflora/fiscalidade_server/master/scripts/setup.sh)
+```
+
+Escolha a opção `1. Install daemon` e aguarde até completar a instalação. Observe: este comando **não requer** usuário root.
 
 **Configurando:**
 
@@ -37,10 +43,16 @@ Se a instalação ocorrer com sucesso, o arquivo de configuração encontra-se e
 Caso deseje desinstala-lo, execute:
 
 ```bash
-curl -sSf https://raw.githubusercontent.com/risoflora/fiscalidade_server/master/scripts/setup.sh | sh
+sh <(curl -s -L https://raw.githubusercontent.com/risoflora/fiscalidade_server/master/scripts/setup.sh)
 ```
 
-Escolha a opção "`2. Uninstall daemon`" e aguarde a desinstalação.
+ou:
+
+```bash
+bash <(curl -s -L https://raw.githubusercontent.com/risoflora/fiscalidade_server/master/scripts/setup.sh)
+```
+
+Escolha a opção `2. Uninstall daemon` e aguarde a desinstalação.
 
 ## Usando
 
