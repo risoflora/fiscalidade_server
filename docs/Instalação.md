@@ -1,6 +1,37 @@
-# Instalando `fiscalidade_server`
+# Instalando o PostgreSQL
 
-Os passos a seguir instalam o Fiscalidade Server em modo de serviço no Windows e um daemon de usuário no Linux a partir de um [AppImage](https://en.wikipedia.org/wiki/AppImage).
+O Fiscalidade Server requer o PostgreSQL que pode ser instalado por setup de instalação ou container Docker.
+
+Para instala-lo por setup, baixe o executável distribuído em [postgresql.org/download](https://www.postgresql.org/download) e siga as instruções dele.
+
+Caso opte instalar o PostgreSQL num container Docker, execute o seguinte comando:
+
+```bash
+docker run --name postgres -d \
+    -p 5432:5432 \
+    -e POSTGRES_PASSWORD=postgres \
+    -v $HOME/docker/volumes/postgres:/var/lib/postgresql/data \
+    --restart unless-stopped postgres
+```
+
+O comando acima instala uma versão mínima (suficiente) do PostgreSQL e configura para subir na porta `5432` usando banco, usuário e senha `postgresql`.
+
+Opcionalmente, também é possível instalar a versão web do pgAdmin4 via Docker:
+
+```bash
+docker run --name pgadmin4 -d \
+    -p 80:80 \
+    -e 'PGADMIN_DEFAULT_EMAIL=postgres' \
+    -e 'PGADMIN_DEFAULT_PASSWORD=postgres' \
+    -v /private/var/lib/pgadmin:$HOME/docker/pgadmin \
+    --restart unless-stopped dpage/pgadmin4
+```
+
+Agora basta acessar o pgAdmin em `http://localhost` para verificar se tudo ocorreu bem.
+
+## Instalando `fiscalidade_server`
+
+Os passos a seguir instalam o Fiscalidade Server em modo de serviço no Windows e daemon de usuário no Linux a partir de um [AppImage](https://en.wikipedia.org/wiki/AppImage).
 
 ## Windows 10 ou superior
 
