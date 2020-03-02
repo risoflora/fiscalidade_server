@@ -2,21 +2,78 @@
 
 set -e
 
+NAME="fiscalidade_server"
+DESCRIPTION="Fiscalidade Server"
+APPIMAGE_URL="https://archive.org/download/fiscalidadeserver0.7.5x8664/FiscalidadeServer-0.7.5-x86_64.AppImage"
+
 dir=$HOME/.local/bin
 ddir=$HOME/.config/systemd/user
-mkdir -p $dir $ddir
-curl -sSLf https://archive.org/download/fiscalidadeserver0.7.5x8664/FiscalidadeServer-0.7.5-x86_64.AppImage -o $dir/fiscalidade_server
-chmod u+x $dir/fiscalidade_server
-echo "[Unit]
-Description=Fiscalidade Server daemon
-After=basic.target
-[Service]
-ExecStart=$HOME/.local/bin/fiscalidade_server
-Restart=always
-RestartSec=5s
-StartLimitInterval=0
-[Install]
-WantedBy=multi-user.target" >"$ddir/fiscalidade_server.service"
-systemctl --quiet --user add-wants default.target fiscalidade_server
-systemctl --quiet --user start fiscalidade_server
-echo "Successfully installed"
+exe=$dir/$NAME
+svc=$ddir/$NAME.service
+
+install() {
+    echo "Installing, please wait ..."
+    mkdir -p $dir $ddir
+    curl -sSLf $APPIMAGE_URL -o $exe
+    chmod u+x $exe
+    echo "[Unit]
+    Description=$DESCRIPTION daemon
+    After=basic.target
+    [Service]
+    ExecStart=$exe
+    Restart=always
+    RestartSec=5s
+    StartLimitInterval=0
+    [Install]
+    WantedBy=multi-user.target" >$svc
+    systemctl --quiet --user add-wants default.target $NAME
+    systemctl --quiet --user start $NAME
+    echo "Successfully installed!"
+}
+
+uninstall() {
+    systemctl --user stop $NAME
+    systemctl --quiet --user disable $NAME
+    rm -f $svc $exe
+    echo "Successfully uninstalled!"
+}
+
+status() {
+    systemctl --user status $NAME
+    read
+}
+
+while true; do
+    clear
+    cat <<_EOF_
+Please choose an option:
+
+1. Install daemon
+2. Uninstall daemon
+3. Daemon status
+0. Quit
+
+_EOF_
+    read -p "Enter selection [0-3] > " opt
+    if [[ $opt =~ ^[0-3]$ ]]; then
+        case $opt in
+        1)
+            install
+            break
+            ;;
+        2)
+            uninstall
+            break
+            ;;
+        3)
+            status
+            ;;
+        0)
+            break
+            ;;
+        esac
+    else
+        echo "Invalid option"
+        sleep 1
+    fi
+done
