@@ -54,12 +54,6 @@ Caso deseje desinstala-lo, acesse o **Painel de control** do sistema e remova-o 
 Para instalar o Fiscalidade Server no Linux execute o seguinte comando:
 
 ```bash
-sh <(curl -s -L https://raw.githubusercontent.com/risoflora/fiscalidade_server/master/scripts/setup.sh)
-```
-
-ou:
-
-```bash
 bash <(curl -s -L https://raw.githubusercontent.com/risoflora/fiscalidade_server/master/scripts/setup.sh)
 ```
 
@@ -72,12 +66,6 @@ Se a instalação ocorrer com sucesso, o arquivo de configuração encontra-se e
 **Desinstalando:**
 
 Caso deseje desinstala-lo, execute:
-
-```bash
-sh <(curl -s -L https://raw.githubusercontent.com/risoflora/fiscalidade_server/master/scripts/setup.sh)
-```
-
-ou:
 
 ```bash
 bash <(curl -s -L https://raw.githubusercontent.com/risoflora/fiscalidade_server/master/scripts/setup.sh)
