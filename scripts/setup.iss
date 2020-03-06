@@ -108,7 +108,7 @@ begin
   SaveStringToFile(ConfigFileName,
     'port=' + DatabasePage.Values[0] + sLineBreak +
     'database=' + sDatabasePrefix + DatabasePage.Values[1] + sLineBreak +
-    'silent=true', True);
+    'silent=true', False);
 end;
 
 procedure InitializeWizard;
@@ -130,10 +130,10 @@ begin
   Result := DatabasePage.Values[0] <> '';
   if not Result then
   begin
-    MsgBox('Vocï¿½ precisa informar a porta do servidor', mbError, MB_OK);
+    MsgBox('Você precisa informar a porta do servidor', mbError, MB_OK);
     Exit;
   end;
   Result := DatabasePage.Values[1] <> '';
   if not Result then
-    MsgBox('Vocï¿½ precisa informar a URL do banco de dados', mbError, MB_OK);
+    MsgBox('Você precisa informar a URL do banco de dados', mbError, MB_OK);
 end;
