@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS fiscalidade_taxpayers (
   -- Ativo
   active BOOLEAN NOT NULL DEFAULT TRUE,
   -- Data de cadastro
-  created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   UNIQUE (name, business_name, registry, email, token)
 );
 
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS fiscalidade_services (
   -- Ativo
   active BOOLEAN NOT NULL DEFAULT TRUE,
   -- Data de cadastro
-  created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   UNIQUE (description, slug)
 );
 
@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS fiscalidade_taxpayers_services (
   -- Data de liberação
   allowed_at TIMESTAMP WITHOUT TIME ZONE,
   -- Data de cadastro
-  created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   UNIQUE (taxpayer_id, service_id)
 );
 
@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS fiscalidade_caches (
   -- Conteúdo de cache
   value BYTEA NOT NULL,
   -- Data de cadastro
-  created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- View para lista serviços relacionados a contribuintes
