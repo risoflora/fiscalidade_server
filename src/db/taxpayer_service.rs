@@ -27,6 +27,10 @@ pub fn by_taxpayer_and_service(
         .get_result(conn)?)
 }
 
+pub fn list(conn: &PgConnection) -> Result<Vec<ViewableTaxpayerService>, Error> {
+    Ok(taxpayers_services_view::table.load(conn)?)
+}
+
 pub fn unauthorized(conn: &PgConnection) -> Result<Vec<ViewableTaxpayerService>, Error> {
     Ok(taxpayers_services_view::table
         .filter(taxpayers_services_view::allowed_at.is_null())
