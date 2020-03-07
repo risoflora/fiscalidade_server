@@ -62,6 +62,9 @@ Filename: {sys}\sc.exe; Parameters: "delete {#MyAppName}"; Flags: runhidden
 [Messages]
 BeveledLabel= {#MyAppDesc} - {#MyAppURL}
 
+[UninstallDelete]
+Type: files; Name: "{app}\{#MyAppName}.conf"
+
 [Code]
 const
   sLineBreak = #13#10;
