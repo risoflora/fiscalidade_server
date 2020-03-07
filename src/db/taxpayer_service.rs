@@ -3,7 +3,8 @@ use diesel::{dsl, ExpressionMethods, PgConnection, QueryDsl, RunQueryDsl};
 
 use crate::db::{schema::fiscalidade_taxpayers_services_view as taxpayers_services_view, Error};
 use crate::models::taxpayer_service::{
-    InsertableTaxpayerService, QueryableTaxpayerService, ViewableTaxpayerService,
+    InsertableTaxpayerService, QueryableTaxpayerService, TaxpayerServiceStatus,
+    ViewableTaxpayerService,
 };
 use crate::schema::fiscalidade_taxpayers_services as taxpayers_services;
 
@@ -27,14 +28,19 @@ pub fn by_taxpayer_and_service(
         .get_result(conn)?)
 }
 
-pub fn list(conn: &PgConnection) -> Result<Vec<ViewableTaxpayerService>, Error> {
-    Ok(taxpayers_services_view::table.load(conn)?)
-}
-
-pub fn unauthorized(conn: &PgConnection) -> Result<Vec<ViewableTaxpayerService>, Error> {
-    Ok(taxpayers_services_view::table
-        .filter(taxpayers_services_view::allowed_at.is_null())
-        .load(conn)?)
+pub fn list(
+    conn: &PgConnection,
+    status: Option<TaxpayerServiceStatus>,
+) -> Result<Vec<ViewableTaxpayerService>, Error> {
+    Ok(match status {
+        Some(TaxpayerServiceStatus::Authorized) => taxpayers_services_view::table
+            .filter(taxpayers_services_view::allowed_at.is_not_null())
+            .load(conn),
+        Some(TaxpayerServiceStatus::Unauthorized) => taxpayers_services_view::table
+            .filter(taxpayers_services_view::allowed_at.is_null())
+            .load(conn),
+        None => taxpayers_services_view::table.load(conn),
+    }?)
 }
 
 pub fn authorize(conn: &PgConnection, id: i64) -> Result<Option<QueryableTaxpayerService>, Error> {

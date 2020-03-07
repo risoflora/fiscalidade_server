@@ -152,7 +152,6 @@ pub fn rocket() -> anyhow::Result<rocket::Rocket> {
                 services::list,
                 taxpayer_service::create,
                 taxpayer_service::list,
-                taxpayer_service::unauthorized,
                 taxpayer_service::authorize,
                 taxpayer_service::unauthorize
             ],

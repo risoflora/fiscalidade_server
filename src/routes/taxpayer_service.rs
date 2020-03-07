@@ -6,7 +6,7 @@ use super::{
     ApiError,
 };
 use crate::db::{self, Conn};
-use crate::models::taxpayer_service::InsertableTaxpayerService;
+use crate::models::taxpayer_service::{InsertableTaxpayerService, TaxpayerServiceStatus};
 
 #[post("/taxpayers/services", data = "<taxpayer_service>")]
 pub fn create(
@@ -20,14 +20,13 @@ pub fn create(
     )?))
 }
 
-#[get("/taxpayers/services")]
-pub fn list(conn: Conn, _auth: AuthAdmin) -> Result<JsonValue, ApiError> {
-    Ok(json_ok!(db::taxpayer_service::list(&conn)?))
-}
-
-#[get("/taxpayers/services/unauthorized")]
-pub fn unauthorized(conn: Conn, _auth: AuthAdmin) -> Result<JsonValue, ApiError> {
-    Ok(json_ok!(db::taxpayer_service::unauthorized(&conn)?))
+#[get("/taxpayers/services?<status>")]
+pub fn list(
+    conn: Conn,
+    _auth: AuthAdmin,
+    status: Option<TaxpayerServiceStatus>,
+) -> Result<JsonValue, ApiError> {
+    Ok(json_ok!(db::taxpayer_service::list(&conn, status)?))
 }
 
 #[post("/taxpayers/services/authorize/<id>")]

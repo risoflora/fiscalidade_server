@@ -1,9 +1,16 @@
 use chrono::NaiveDateTime;
+use rocket::request::FromFormValue;
 use serde::{Deserialize, Serialize};
 
 use crate::db::schema::fiscalidade_taxpayers_services_view as taxpayers_services_view;
 use crate::models::taxpayer::QueryableTaxpayer;
 use crate::schema::fiscalidade_taxpayers_services as taxpayers_services;
+
+#[derive(Debug, Copy, Clone, PartialEq, PartialOrd, FromFormValue)]
+pub enum TaxpayerServiceStatus {
+    Authorized,
+    Unauthorized,
+}
 
 #[derive(Serialize, Queryable)]
 pub struct QueryableTaxpayerService {
