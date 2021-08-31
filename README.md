@@ -74,18 +74,19 @@ Siga as instruções iniciais de uso em [docs/Uso.md](docs/Uso.md). Para instru�
 
 ## Wishlist
 
-- [x] criar AppImage (prioridade alta)
-- [x] embutir arquivo de serviço na instalação (prioridade alta)
+- [x] criar AppImage
+- [x] embutir arquivo de serviço na instalação
 - [x] embutir arquivo de webservice no executável
 - [x] configuração via arquivo
-- [ ] paginação de dados (prioridade baixa)
-- [ ] mais serviços como envio de lote, consulta de recibo, inutilização, distribuição de DFe, etc. (prioridade alta)
-- [ ] compressão de dados (prioridade baixa)
-- [ ] testes (prioridade alta)
-- [ ] documentação (prioridade alta)
 - [x] exemplos de uso com cURL
-- [ ] imagem Docker (prioridade baixa)
-- [ ] migrar web core para Warp (prioridade baixa)
+- [ ] migrar para código assíncrono
+- [ ] atualizar documentação
+- [ ] imagem Docker
+- [ ] compressão de dados
+- [ ] paginação de dados
+- [ ] mais serviços como envio de lote, consulta de recibo, inutilização, distribuição de DFe, etc.
+- [ ] testes
+- [ ] mais documentação
 
 ## Contribuições
 
