@@ -1,0 +1,24 @@
+[package]
+name = "fiscalidade_server"
+version = "0.8.0"
+authors = ["Silvio Clecio (silvioprog) <silvioprog@gmail.com>"]
+description = "Servidor REST para validação, assinatura e transmissão de XMLs para webservices SEFAZ."
+license = "MIT/Apache-2.0"
+homepage = "https://github.com/risoflora/fiscalidade_server"
+repository = "https://github.com/risoflora/fiscalidade_server"
+readme = "README.md"
+keywords = ["nfe", "sped", "sefaz"]
+categories = ["network-programming", "web-programming"]
+edition = "2018"
+
+[profile.release]
+lto = true
+opt-level = "z"
+codegen-units = 1
+panic = "abort"
+
+[dependencies]
+tokio = { version = "1", features = ["macros", "rt"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+axum = { version = "0.2" }
