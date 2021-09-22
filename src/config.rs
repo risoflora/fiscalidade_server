@@ -28,7 +28,6 @@ pub struct Configuration {
 
 impl Configuration {
     pub fn from_file<P: AsRef<Path>>(path: P) -> Result<Self> {
-        println!("{:?}", path.as_ref());
         let config = read_to_string(path).unwrap_or_default();
         Ok(toml::from_str(&config)?)
     }
