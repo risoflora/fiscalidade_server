@@ -14,7 +14,7 @@ async fn main() -> Result<()> {
     let config = Configuration::from_file(opts.config_file.unwrap_or_default())?;
     let addr = SocketAddr::from((config.server.host, config.server.port));
     axum::Server::bind(&addr)
-        .serve(app().into_make_service())
+        .serve(app(config).into_make_service())
         .await?;
     Ok(())
 }

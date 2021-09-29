@@ -7,7 +7,9 @@ use std::{
 use thiserror::Error;
 use toml::de::Error as TomlError;
 
-use crate::{home::home_dir, server::config::ServerConfiguration};
+use crate::{
+    cert::config::CertificateConfiguration, home::home_dir, server::config::ServerConfiguration,
+};
 
 #[inline]
 pub fn config_dir() -> Option<PathBuf> {
@@ -24,6 +26,8 @@ pub enum ArgsError {
 pub struct Configuration {
     #[serde(default)]
     pub server: ServerConfiguration,
+    #[serde(rename = "certificate")]
+    pub certificates: Option<Vec<CertificateConfiguration>>,
 }
 
 impl Configuration {
