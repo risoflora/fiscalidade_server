@@ -1,0 +1,13 @@
+[server]
+host = "127.0.0.1"
+port = 3000
+
+[[deployments]]
+company = { document = "41271254000121" }
+certificate = { path = "certificado-cliente-1.pfx", password = "12345678" }
+service = { kind = "nfe", state = "pb", environment = "producao" }
+
+[[deployments]]
+company = { document = "02904998000184" }
+certificate = { path = "certificado-cliente-2.pfx", password = "87654321" }
+service = { kind = "nfe", state = "mt", environment = "homologacao" }

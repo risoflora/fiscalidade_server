@@ -1,8 +1,5 @@
-pub mod config;
-pub mod store;
-
 #[derive(Clone, Debug, Deserialize)]
-pub struct Certificate {
+pub struct CertificateConfiguration {
     pub path: String,
     pub password: String,
 }
