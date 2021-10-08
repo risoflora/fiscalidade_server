@@ -1,13 +1,16 @@
-[server]
-host = "127.0.0.1"
-port = 3000
+[servidor]
+endereco = "127.0.0.1"
+porta = 3000
 
-[[deployments]]
-company = { document = "41271254000121" }
-certificate = { path = "certificado-cliente-1.pfx", password = "12345678" }
-service = { kind = "nfe", state = "pb", environment = "producao" }
+# Gerando token de acesso:
+# echo -n $(echo -n 41271254000121; h=($(cat certificado-cliente-1.pfx | sha256sum )); echo -n $h; echo -n 12345678nfepb) | sha256sum
 
-[[deployments]]
-company = { document = "02904998000184" }
-certificate = { path = "certificado-cliente-2.pfx", password = "87654321" }
-service = { kind = "nfe", state = "mt", environment = "homologacao" }
+[[implantacao]]
+empresa = { documento = "41271254000121" }
+certificado = { caminho = "certificado-cliente-1.pfx", senha = "12345678" }
+servico = { tipo = "nfe", estado = "pb", ambiente = "producao" }
+
+[[implantacao]]
+empresa = { documento = "02904998000184" }
+certificado = { caminho = "certificado-cliente-2.pfx", senha = "87654321" }
+servico = { tipo = "nfce", estado = "mt", ambiente = "homologacao" }

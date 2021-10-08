@@ -1,4 +1,4 @@
-use std::{env, result::Result};
+use std::{env, result};
 
 use getopts::{Fail, Matches, Options as OptsOptions};
 use thiserror::Error;
@@ -13,7 +13,7 @@ pub enum ArgsError {
 
 pub struct Args(Options);
 
-pub type ArgsResult = Result<Options, ArgsError>;
+pub type ArgsResult = result::Result<Options, ArgsError>;
 
 impl Args {
     #[inline]

@@ -6,23 +6,23 @@ fn default_host() -> IpAddr {
 }
 
 #[inline]
-fn default_port() -> u16 {
-    8080
+fn default_post() -> u16 {
+    3000
 }
 
 #[derive(Clone, Debug, Deserialize)]
-pub struct ServidorConfiguration {
-    #[serde(default = "default_host")]
+pub struct ServerConfiguration {
+    #[serde(rename = "endereco", default = "default_host")]
     pub host: IpAddr,
-    #[serde(default = "default_port")]
+    #[serde(rename = "porta", default = "default_post")]
     pub port: u16,
 }
 
-impl Default for ServidorConfiguration {
+impl Default for ServerConfiguration {
     fn default() -> Self {
         Self {
             host: default_host(),
-            port: default_port(),
+            port: default_post(),
         }
     }
 }

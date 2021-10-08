@@ -1,13 +1,12 @@
 use std::{
     collections::HashMap,
-    fs::read_to_string,
-    io::Result,
+    fs, io,
     path::{Path, PathBuf},
 };
 
 use crate::home::home_dir;
 
-use self::models::{deployment::DeploymentConfiguration, server::ServidorConfiguration};
+use self::models::{deployment::DeploymentConfiguration, server::ServerConfiguration};
 
 pub mod models;
 
@@ -18,25 +17,25 @@ pub fn config_dir() -> Option<PathBuf> {
 
 #[derive(Clone, Debug, Deserialize)]
 pub struct Configuration {
-    #[serde(default)]
-    pub server: ServidorConfiguration,
-    #[serde(default)]
+    #[serde(rename = "servidor", default)]
+    pub server: ServerConfiguration,
+    #[serde(rename = "implantacao", default)]
     pub deployments: Vec<DeploymentConfiguration>,
 }
 
 pub type Deployments = HashMap<String, DeploymentConfiguration>;
 
 impl Configuration {
-    pub fn from_file<P: AsRef<Path>>(path: P) -> Result<Self> {
-        let config = read_to_string(path).unwrap_or_default();
+    pub fn from_file<P: AsRef<Path>>(path: P) -> io::Result<Self> {
+        let config = fs::read_to_string(path).unwrap_or_default();
         Ok(toml::from_str(&config)?)
     }
 
-    pub fn deployments(&self) -> Deployments {
-        self.deployments
-            .clone()
-            .into_iter()
-            .map(|deployment| (deployment.token(), deployment))
-            .collect()
+    pub fn deployments(&self) -> crate::Result<Deployments> {
+        let mut deployments = Deployments::new();
+        for deployment in self.deployments.clone() {
+            deployments.insert(deployment.token()?, deployment.clone());
+        }
+        Ok(deployments)
     }
 }
