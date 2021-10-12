@@ -34,7 +34,8 @@ pub fn app(config: Configuration) -> crate::Result<Router<BoxRoute>> {
         .into_inner();
     Ok(Router::new()
         .route("/version", get(handlers::version))
-        .route("/status_servico", post(handlers::status_servico))
+        .route("/status_servico", post(handlers::dfe::status_servico))
+        .route("/consultar_xml", post(handlers::dfe::consultar_xml))
         .layer(middleware_stack)
         .boxed())
 }

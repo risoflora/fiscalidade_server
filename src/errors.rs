@@ -14,19 +14,21 @@ pub enum Errors {
     FiscalidadePkcs12CertificateError(#[from] Pkcs12CertificateError),
     #[error(transparent)]
     FiscalidadeDfeError(#[from] DfeError),
-    #[error("Headers has been taken by another extractor")]
+    #[error("Cabeçalhos extraídos por outro extrator")]
     HeadersTakenByAnotherExtractor,
-    #[error("Missing token")]
-    MissingToken,
-    #[error("Invalid token")]
-    InvalidToken,
-    #[error("Cannot load certificate '{path}': {error}")]
+    #[error("Faltando token para autenticação")]
+    MissingAuthToken,
+    #[error("Token inválido para autenticação")]
+    InvalidAuthToken,
+    #[error("Não foi possível carregar certificado '{path}': {error}")]
     CannotLoadCertificate { path: String, error: io::Error },
-    #[error("Invalid configuration for document {document}: {configuration}")]
+    #[error("Configuração inválida para documento {document}: {configuration}")]
     InvalidConfiguration {
         document: String,
         configuration: String,
     },
-    #[error("Deployment not found for token {0}")]
+    #[error("Implantação não encontrada para token {0}")]
     DeploymentNotFound(String),
+    #[error("Faltando campo em payload: {0}")]
+    MissingPayloadField(String),
 }

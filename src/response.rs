@@ -28,7 +28,7 @@ impl IntoResponse for Errors {
 
     fn into_response(self) -> AxumResponse<Self::Body> {
         let status = match self {
-            Errors::MissingToken | Errors::InvalidToken => StatusCode::UNAUTHORIZED,
+            Errors::MissingAuthToken | Errors::InvalidAuthToken => StatusCode::UNAUTHORIZED,
             _ => StatusCode::INTERNAL_SERVER_ERROR,
         };
         (status, Json(json!({"error": self.to_string()}))).into_response()

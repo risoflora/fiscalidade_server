@@ -25,9 +25,9 @@ where
             .headers()
             .ok_or(Errors::HeadersTakenByAnotherExtractor)?
             .get("X-Auth-Token")
-            .ok_or(Errors::MissingToken)?
+            .ok_or(Errors::MissingAuthToken)?
             .to_str()
-            .map_err(|_| Errors::InvalidToken)?;
+            .map_err(|_| Errors::InvalidAuthToken)?;
         let deployment = deployments
             .get(token)
             .ok_or(Errors::DeploymentNotFound(token.to_string()))?;
