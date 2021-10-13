@@ -10,6 +10,8 @@ use self::models::{deployment::DeploymentConfiguration, server::ServerConfigurat
 
 pub mod models;
 
+mod extractor;
+
 #[inline]
 pub fn config_dir() -> Option<PathBuf> {
     home_dir().map(|p| p.join("config.toml"))

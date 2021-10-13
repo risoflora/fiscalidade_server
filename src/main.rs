@@ -1,5 +1,6 @@
 use std::{net::SocketAddr, process::exit};
 
+use axum::Server;
 use fiscalidade_server::{app, args, config::Configuration};
 
 #[tokio::main(flavor = "current_thread")]
@@ -11,7 +12,7 @@ async fn main() -> anyhow::Result<()> {
     }
     let config = Configuration::from_file(opts.config_file.unwrap_or_default())?;
     let addr = SocketAddr::from((config.server.host, config.server.port));
-    axum::Server::bind(&addr)
+    Server::bind(&addr)
         .serve(app(config)?.into_make_service())
         .await?;
     Ok(())

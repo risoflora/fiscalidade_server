@@ -18,10 +18,10 @@ pub mod config;
 
 mod consts;
 mod errors;
-mod extractors;
 mod handlers;
 mod hashes;
 mod home;
+mod json;
 mod options;
 mod response;
 mod version;

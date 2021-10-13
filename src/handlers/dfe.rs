@@ -1,9 +1,8 @@
-use axum::Json;
 use fiscalidade::{Ambiente, Dfe, Modelo, Pkcs12Certificate, Uf, WebServices};
 
 use crate::{
     config::models::deployment::DeploymentConfiguration, errors::Errors,
-    handlers::payload::Payload, response::Response,
+    handlers::payload::Payload, json::Json, response::Response,
 };
 
 pub async fn status_servico(deployment: DeploymentConfiguration) -> crate::Result<Json<Response>> {

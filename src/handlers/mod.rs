@@ -1,6 +1,4 @@
-use axum::Json;
-
-use crate::version::Version;
+use crate::{json::Json, version::Version};
 
 pub mod dfe;
 pub mod payload;
