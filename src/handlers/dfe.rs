@@ -1,8 +1,9 @@
+use axum::extract::Path;
 use fiscalidade::{Ambiente, Dfe, Modelo, Pkcs12Certificate, Uf, WebServices};
 
 use crate::{
-    config::models::deployment::DeploymentConfiguration, errors::Errors,
-    handlers::payload::Payload, json::Json, response::Response,
+    config::models::deployment::DeploymentConfiguration, errors::Errors, json::Json,
+    response::Response,
 };
 
 pub async fn status_servico(deployment: DeploymentConfiguration) -> crate::Result<Json<Response>> {
@@ -37,9 +38,9 @@ pub async fn status_servico(deployment: DeploymentConfiguration) -> crate::Resul
     Ok(Json(Response::from_xml(xml.to_string())))
 }
 
-pub async fn consultar_xml(
+pub async fn consultar_protocolo(
     deployment: DeploymentConfiguration,
-    Json(payload): Json<Payload>,
+    chave: Path<String>,
 ) -> crate::Result<Json<Response>> {
     let webservices = WebServices::from_embedded()?;
     let pkcs12 = Pkcs12Certificate::from_file(
@@ -50,7 +51,7 @@ pub async fn consultar_xml(
     let document = deployment.company.document;
     let dfe = Dfe::new().set_webservices(webservices).set_pkcs12(pkcs12);
     let xml = dfe
-        .consultar_xml(
+        .consultar_protocolo(
             Modelo::from_str(&deployment.service.doc_model).ok_or(
                 Errors::InvalidConfiguration {
                     document: document.clone(),
@@ -67,10 +68,7 @@ pub async fn consultar_xml(
                     configuration: "deployment.service.environment".to_string(),
                 },
             )?,
-            payload
-                .chave_nfe
-                .ok_or(Errors::MissingPayloadField("chave_nfe".to_string()))?
-                .as_str(),
+            &chave,
         )
         .await?;
     Ok(Json(Response::from_xml(xml.to_string())))

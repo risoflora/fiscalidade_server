@@ -29,6 +29,4 @@ pub enum Errors {
     },
     #[error("Implantação não encontrada para token {0}")]
     DeploymentNotFound(String),
-    #[error("Faltando campo em payload: {0}")]
-    MissingPayloadField(String),
 }

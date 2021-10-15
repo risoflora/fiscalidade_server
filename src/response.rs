@@ -43,7 +43,7 @@ where
 
     fn into_response(self) -> AxumResponse<Self::Body> {
         let bytes = match serde_json::to_vec(&self.0) {
-            Ok(response) => response,
+            Ok(bytes) => bytes,
             Err(error) => {
                 return AxumResponse::builder()
                     .status(StatusCode::INTERNAL_SERVER_ERROR)
