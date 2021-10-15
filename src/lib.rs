@@ -3,7 +3,11 @@ extern crate serde;
 
 use std::result;
 
-use axum::{handler::get, routing::BoxRoute, AddExtensionLayer, Router};
+use axum::{
+    handler::{get, Handler},
+    routing::BoxRoute,
+    AddExtensionLayer, Router,
+};
 use errors::Errors;
 use tower::ServiceBuilder;
 
@@ -20,7 +24,6 @@ mod home;
 mod json;
 mod options;
 mod response;
-mod version;
 
 pub type Result<T> = result::Result<T, Errors>;
 
@@ -29,12 +32,13 @@ pub fn app(config: Configuration) -> crate::Result<Router<BoxRoute>> {
         .layer(AddExtensionLayer::new(config.deployments()?))
         .into_inner();
     Ok(Router::new()
-        .route("/version", get(handlers::version))
+        .route("/versao", get(handlers::version))
         .route("/status_servico", get(handlers::dfe::status_servico))
         .route(
             "/consultar_protocolo/:chave",
             get(handlers::dfe::consultar_protocolo),
         )
+        .or(handlers::not_found.into_service())
         .layer(middleware_stack)
         .boxed())
 }
