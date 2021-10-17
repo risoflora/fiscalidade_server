@@ -38,6 +38,10 @@ pub fn app(config: Configuration) -> crate::Result<Router<BoxRoute>> {
             "/consultar_protocolo/:chave",
             get(handlers::dfe::consultar_protocolo),
         )
+        .route(
+            "/consultar_autorizacao/:recibo",
+            get(handlers::dfe::consultar_autorizacao),
+        )
         .or(handlers::not_found.into_service())
         .layer(middleware_stack)
         .boxed())
