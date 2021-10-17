@@ -7,7 +7,7 @@ fn default_host() -> IpAddr {
 
 #[inline]
 fn default_post() -> u16 {
-    3000
+    3223
 }
 
 #[derive(Clone, Debug, Deserialize)]
