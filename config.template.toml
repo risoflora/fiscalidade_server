@@ -7,10 +7,10 @@ porta = 3000
 
 [[implantacao]]
 empresa = { documento = "41271254000121" }
-certificado = { caminho = "certificado-cliente-1.pfx", senha = "12345678" }
+certificado = { caminho = "/home/fiscalidade_server/.fiscalidade_server/certificado-1.pfx", senha = "12345678" }
 servico = { tipo = "nfe", estado = "pb", ambiente = "producao" }
 
 [[implantacao]]
 empresa = { documento = "02904998000184" }
-certificado = { caminho = "certificado-cliente-2.pfx", senha = "87654321" }
+certificado = { caminho = "/home/fiscalidade_server/.fiscalidade_server/certificado-2.pfx", senha = "87654321" }
 servico = { tipo = "nfce", estado = "mt", ambiente = "homologacao" }
