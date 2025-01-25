@@ -30,7 +30,7 @@ simplelog = "^0.7"
 dotenv = "^0.15"
 getopts = "^0.2"
 chrono = { version = "^0.4", features = ["serde"] }
-nanoid = { git = "https://github.com/nikolay-govorov/nanoid" }
+nanoid = "0.4"
 base64 = "^0.11"
 
 
